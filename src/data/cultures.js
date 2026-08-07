@@ -15,6 +15,11 @@
 export const CULTURES = [
   { name: "Sumerians", start: -2900, end: -1900, color: "#c9a94a",
     region: ["kesh", "ur", "uruk", "nippur", "shuruppak", "eridu", "larsa", "kish"] },
+  // Ends at Rome's annexation of Egypt (30 BCE) — after that, Egypt's
+  // glow comes from the Greeks/Romans bands above, which already
+  // include Alexandria.
+  { name: "Ancient Egyptians", start: -2350, end: -30, color: "#2f6b8a",
+    region: ["saqqara", "memphis", "deir_el_bersha", "thebes", "alexandria"] },
   { name: "Akkadians", start: -2334, end: -2154, color: "#b5763f",
     region: ["kish", "babylon", "mari"] },
   { name: "Babylonians", start: -1894, end: -539, color: "#8a6fb0",

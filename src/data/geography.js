@@ -38,6 +38,12 @@ export const CITIES = {
   zhou: { lon: 108.90, lat: 34.30, label: "Zhou (Xi'an)" },
   guodian: { lon: 112.19, lat: 31.03, label: "Guodian" },
   qufu: { lon: 116.99, lat: 35.60, label: "Qufu" },
+
+  // Egypt (Phase 6c)
+  saqqara: { lon: 31.216, lat: 29.871, label: "Saqqara" },
+  memphis: { lon: 31.251, lat: 29.844, label: "Memphis" },
+  deir_el_bersha: { lon: 30.82, lat: 27.78, label: "Deir el-Bersha" },
+  thebes: { lon: 32.60, lat: 25.72, label: "Thebes" },
 };
 
 // Simplified coastlines, as [lon, lat] point lists — GeoJSON polygons
@@ -92,7 +98,11 @@ export const RIVERS = {
     [44.1, 34.5], [44.4, 33.3], [44.9, 32.6], [45.8, 31.9], [47.0, 31.0],
     [47.8, 30.5], [48.0, 29.9],
   ],
-  nile: [[31.0, 29.5], [30.9, 30.5], [29.92, 31.20]],
+  nile: [
+    [32.60, 25.72], [32.40, 26.50], [31.80, 27.20], [30.90, 27.75],
+    [31.00, 28.50], [31.15, 29.30], [31.23, 29.86], [31.10, 30.50],
+    [30.90, 30.50], [29.92, 31.20],
+  ],
   indus: [[73.0, 34.5], [71.5, 30.5], [70.0, 27.0], [68.0, 25.0], [67.3, 23.9]],
   ganges: [[79.0, 30.2], [81.5, 26.0], [83.5, 25.5], [86.0, 25.3], [88.0, 23.8], [90.2, 22.0]],
   yellowRiver: [

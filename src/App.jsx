@@ -66,7 +66,7 @@ export default function App() {
   const selText = selected ? TEXT_BY_ID[selected] : null;
 
   // timeline geometry
-  const TL_W = 1000, TL_H = 285, PAD_L = 8, PAD_R = 8, AXIS_Y = 250;
+  const TL_W = 1000, TL_H = 300, PAD_L = 8, PAD_R = 8, AXIS_Y = 262;
   const tlX = (y) => PAD_L + ((y - YEAR_MIN) / (YEAR_MAX - YEAR_MIN)) * (TL_W - PAD_L - PAD_R);
   const bandTop = 10, bandH = 11, bandGap = 2;
 
@@ -83,9 +83,9 @@ export default function App() {
           <div style={S.kicker}>An interactive history · Phase 6</div>
           <h1 style={S.h1}>A Living Map of Sacred Literature</h1>
           <p style={S.sub}>
-            From the <em>Kesh Temple Hymn</em> (c. 2600 BCE) in the Near East to the <em>Rigveda</em>,
-            the <em>Analects</em>, and the <em>Pali Canon</em> further east — one real-geography
-            globe, one timeline. Press play to let time move.
+            From the <em>Pyramid Texts</em> and <em>Kesh Temple Hymn</em> (c. 2600 BCE) to the
+            <em> Rigveda</em>, the <em>Analects</em>, and the <em>Pali Canon</em> further east — one
+            real-geography globe, one timeline. Press play to let time move.
           </p>
         </div>
         <div style={S.clock}>

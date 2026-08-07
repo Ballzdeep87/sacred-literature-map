@@ -18,6 +18,7 @@ export const LANES = [
   { id: "vedic", label: "Vedic / Hindu", color: "#c9622f" },
   { id: "chinese", label: "Chinese", color: "#a8452e" },
   { id: "buddhist", label: "Buddhist", color: "#8a6f9a" },
+  { id: "egyptian", label: "Egyptian", color: "#2f6b8a" },
 ];
 
 export const TEXT_LANE = {
@@ -53,4 +54,8 @@ export const TEXT_LANE = {
   tao_te_ching: "chinese",
   analects: "chinese",
   pali_canon: "buddhist",
+  pyramid_texts: "egyptian",
+  ptahhotep: "egyptian",
+  coffin_texts: "egyptian",
+  book_of_the_dead: "egyptian",
 };
