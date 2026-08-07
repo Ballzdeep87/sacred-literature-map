@@ -99,6 +99,37 @@ export const SEAS = {
     [120, 37], [123, 38], [124, 36], [122, 33], [121, 30], [122, 27],
     [122, 22], [120, 18], [118, 14], [115, 10], [110, 8], [107, 10],
   ],
+
+  // Americas focus (Phase 7c) — Pacific and Gulf/Caribbean coasts,
+  // simplified; the Yucatán peninsula emerges as the land left between
+  // the two eastern seas, the same way Ugarit/Levant do between the
+  // Mediterranean and inland Mesopotamia above.
+  pacificAmericas: [
+    [-106, 20], [-101, 17], [-96, 15], [-90, 13], [-85, 9], [-80, 8],
+    [-83, 6], [-90, 9], [-97, 13], [-103, 17], [-106, 20],
+  ],
+  gulfOfMexico: [
+    [-97, 26], [-93, 28], [-89, 27], [-86, 24], [-88, 21], [-92, 19],
+    [-96, 19], [-97, 26],
+  ],
+  caribbeanSea: [
+    [-88, 18], [-85, 17], [-82, 15], [-84, 11], [-87, 13], [-88, 18],
+  ],
+  // A generous box of open North Atlantic — Iceland (LANDMASSES.iceland
+  // below) is drawn back on top of it, island-in-the-sea style.
+  northAtlantic: [
+    [-10, 62], [-27, 62], [-27, 68], [-10, 68], [-10, 62],
+  ],
+};
+
+// Small islands, drawn in land color ON TOP of a sea (see SEAS above) —
+// the simplest way to show something as surrounded by water without
+// needing donut/hole polygons.
+export const LANDMASSES = {
+  iceland: [
+    [-22, 66.5], [-18, 66.4], [-14, 65.5], [-13.5, 64.3], [-15, 63.4],
+    [-19, 63.4], [-22, 63.9], [-24, 64.9], [-23, 65.8], [-22, 66.5],
+  ],
 };
 
 export const RIVERS = {

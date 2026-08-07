@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { CITIES, SEAS, RIVERS, MOUNTAINS } from "../data/geography.js";
+import { CITIES, SEAS, RIVERS, MOUNTAINS, LANDMASSES } from "../data/geography.js";
 import { CULTURES } from "../data/cultures.js";
 import { TEXTS, TEXT_BY_ID, CONFIDENCE_COLOR, LINK_TIER } from "../data/texts.js";
 import { fadeWeight } from "../utils.js";
@@ -101,6 +101,11 @@ export default function GlobeMap({ year, selected }) {
         ))}
         {medLabel && <text x={medLabel[0]} y={medLabel[1]} style={S.seaLabel}>Mediterranean</text>}
         {gulfLabel && <text x={gulfLabel[0]} y={gulfLabel[1]} style={S.seaLabel}>Persian Gulf</text>}
+
+        {/* small islands, drawn back on top of a sea (see LANDMASSES) */}
+        {Object.entries(LANDMASSES).map(([id, coords]) => (
+          <path key={id} d={pathGen(polygon(coords))} fill="url(#land)" stroke="#4b4230" strokeWidth="1" />
+        ))}
 
         {/* rivers */}
         {Object.entries(RIVERS).map(([id, coords]) => (
