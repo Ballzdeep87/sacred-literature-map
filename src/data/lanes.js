@@ -15,6 +15,9 @@ export const LANES = [
   { id: "zoroastrian", label: "Zoroastrian", color: "#c77dc0" },
   { id: "jewish", label: "Israelite & Jewish", color: "#5b8dd9" },
   { id: "christian", label: "Early Christian", color: "#d98b3f" },
+  { id: "vedic", label: "Vedic / Hindu", color: "#c9622f" },
+  { id: "chinese", label: "Chinese", color: "#a8452e" },
+  { id: "buddhist", label: "Buddhist", color: "#8a6f9a" },
 ];
 
 export const TEXT_LANE = {
@@ -43,4 +46,11 @@ export const TEXT_LANE = {
   revelation: "christian",
   didache: "christian",
   clement: "christian",
+  rigveda: "vedic",
+  upanishads: "vedic",
+  shijing: "chinese",
+  yijing: "chinese",
+  tao_te_ching: "chinese",
+  analects: "chinese",
+  pali_canon: "buddhist",
 };

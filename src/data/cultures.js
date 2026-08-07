@@ -38,4 +38,13 @@ export const CULTURES = [
   { name: "Romans", start: -63, end: 300, color: "#a85a5a",
     region: ["antioch", "ugarit", "jerusalem", "alexandria"] },
   { name: "Early Christians", start: 30, end: 300, color: "#d98b3f" },
+
+  // Far Eastern traditions (Phase 6b) — same rules as above: soft,
+  // fuzzy regions sized from their cities, not political borders.
+  { name: "Vedic peoples", start: -1500, end: -500, color: "#c9622f",
+    region: ["punjab", "ganges_plain"] },
+  { name: "Zhou dynasty China", start: -1046, end: -256, color: "#a8452e",
+    region: ["zhou", "guodian", "qufu"] },
+  { name: "Early Buddhist community (Sangha)", start: -450, end: 100, color: "#8a6f9a",
+    region: ["ganges_plain", "sri_lanka"] },
 ];

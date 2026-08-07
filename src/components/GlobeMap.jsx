@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { CITIES, SEAS, RIVERS, FAR_COAST, MOUNTAINS } from "../data/geography.js";
+import { CITIES, SEAS, RIVERS, MOUNTAINS } from "../data/geography.js";
 import { CULTURES } from "../data/cultures.js";
 import { TEXTS, TEXT_BY_ID, CONFIDENCE_COLOR, LINK_TIER } from "../data/texts.js";
 import { fadeWeight } from "../utils.js";
@@ -92,12 +92,6 @@ export default function GlobeMap({ year, selected }) {
         {euphratesLabel && <text x={euphratesLabel[0]} y={euphratesLabel[1]} style={S.riverLabel}>Euphrates</text>}
         {tigrisLabel && <text x={tigrisLabel[0]} y={tigrisLabel[1]} style={S.riverLabel}>Tigris</text>}
 
-        {/* the coastline further east — a placeholder frame for Phase 6b's
-            Far Eastern content, drawn lightly and dashed on purpose so it
-            doesn't read as finished, sourced geography yet */}
-        <path d={pathGen(lineString(FAR_COAST))} fill="none" stroke="#6b6350" strokeWidth="1.5"
-          strokeDasharray="4 4" opacity="0.5" />
-
         {/* peoples/empires — soft blurred glows, not political borders */}
         {regionGeom.map((c) => {
           const w = fadeWeight(year, c.start, c.end);
@@ -157,10 +151,9 @@ export default function GlobeMap({ year, selected }) {
       </svg>
 
       <div style={S.mapNote}>
-        Now real latitude/longitude, projected as a globe — not a modern political map: no modern
-        borders, no satellite imagery. The dashed line further east is a placeholder frame for the
-        Far Eastern content coming next, not finished geography. Positions stay approximate, for
-        orientation rather than survey accuracy.
+        Real latitude/longitude, projected as a globe — not a modern political map: no modern
+        borders, no satellite imagery, just hand-simplified coasts, rivers, and mountains. Positions
+        stay approximate, for orientation rather than survey accuracy.
       </div>
 
       <div style={S.legend}>

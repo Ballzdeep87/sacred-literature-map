@@ -6,10 +6,6 @@
  * (see PROJECT-BRIEF.md.pdf section 5 — no modern map library).
  *
  * Coordinates are [longitude, latitude], matching GeoJSON convention.
- *
- * Cities east of Mesopotamia (India, China) are sketched lightly for
- * now — just enough coastline to frame the world map ahead of Phase 6b,
- * when actual Far Eastern texts and their cities get added properly.
  * ------------------------------------------------------------------ */
 
 export const CITIES = {
@@ -32,6 +28,16 @@ export const CITIES = {
   eridu: { lon: 45.99, lat: 30.81, label: "Eridu" },
   alexandria: { lon: 29.92, lat: 31.20, label: "Alexandria" },
   bactria: { lon: 66.90, lat: 36.75, label: "Bactria" },
+
+  // South Asia (Phase 6b)
+  punjab: { lon: 74.30, lat: 31.60, label: "Punjab" },
+  ganges_plain: { lon: 83.00, lat: 25.30, label: "Ganges Plain" },
+  sri_lanka: { lon: 80.62, lat: 7.47, label: "Aluvihare" },
+
+  // East Asia (Phase 6b)
+  zhou: { lon: 108.90, lat: 34.30, label: "Zhou (Xi'an)" },
+  guodian: { lon: 112.19, lat: 31.03, label: "Guodian" },
+  qufu: { lon: 116.99, lat: 35.60, label: "Qufu" },
 };
 
 // Simplified coastlines, as [lon, lat] point lists — GeoJSON polygons
@@ -66,6 +72,13 @@ export const SEAS = {
     [80, 8], [83, 10], [86, 14], [89, 18], [92, 20], [93, 15], [90, 10],
     [85, 6], [80, 8],
   ],
+  // South China Sea + a gesture toward the Yellow Sea — simplified, to
+  // carve East Asia's coast out of the land backdrop.
+  chinaSea: [
+    [107, 10], [105, 14], [108, 18], [112, 24], [116, 30], [118, 34],
+    [120, 37], [123, 38], [124, 36], [122, 33], [121, 30], [122, 27],
+    [122, 22], [120, 18], [118, 14], [115, 10], [110, 8], [107, 10],
+  ],
 };
 
 export const RIVERS = {
@@ -80,23 +93,22 @@ export const RIVERS = {
     [47.8, 30.5], [48.0, 29.9],
   ],
   nile: [[31.0, 29.5], [30.9, 30.5], [29.92, 31.20]],
-  // Light preview of South Asia's two great rivers, ahead of Phase 6b.
   indus: [[73.0, 34.5], [71.5, 30.5], [70.0, 27.0], [68.0, 25.0], [67.3, 23.9]],
   ganges: [[79.0, 30.2], [81.5, 26.0], [83.5, 25.5], [86.0, 25.3], [88.0, 23.8], [90.2, 22.0]],
+  yellowRiver: [
+    [96, 35], [100, 36], [104, 36], [108, 35], [110, 34.5],
+    [113, 35.5], [115, 36], [117, 37.5], [119, 38],
+  ],
+  yangtze: [
+    [97, 33], [102, 29], [106, 29.5], [110, 30.5], [112.2, 31],
+    [114, 30.5], [117, 30.8], [120, 31.5], [121.5, 31.2],
+  ],
 };
 
-// A simplified southern-Eurasia coastline outline, from the Levant to
-// East Asia — the frame for Phase 6b's Far Eastern content, not final
-// geography for it.
-export const FAR_COAST = [
-  [68, 24], [70, 22], [72, 19], [73, 16], [75, 12], [77, 9], [78, 8],
-  [80, 9], [82, 12], [85, 16], [88, 21], [92, 22], [96, 20], [100, 14],
-  [104, 10], [107, 15], [110, 20], [116, 23], [120, 28], [122, 32],
-  [122, 37], [124, 39],
-];
-
-// Zagros range, schematic — northeast of Mesopotamia.
+// Mountain ranges, schematic — Zagros (northeast of Mesopotamia) and
+// the Himalayan front (north of the Ganges plain).
 export const MOUNTAINS = [
   [45.5, 37.2], [46.3, 36.0], [47.0, 34.8], [47.8, 33.6],
   [48.4, 32.4], [49.0, 31.2], [49.6, 30.0],
+  [75, 32], [78, 30], [81, 29], [84, 28], [87, 27], [90, 27],
 ];
