@@ -1,22 +1,29 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { CITIES, SEAS, RIVERS, MOUNTAINS } from "../data/geography.js";
 import { CULTURES } from "../data/cultures.js";
 import { TEXTS, TEXT_BY_ID, CONFIDENCE_COLOR, LINK_TIER } from "../data/texts.js";
 import { fadeWeight } from "../utils.js";
 import { S } from "../styles.js";
-import { GLOBE_SIZE, project, pathGen, lineString, polygon, GLOBE_OUTLINE, GRATICULE } from "../geo.js";
+import { GLOBE_SIZE, GLOBE_FOCI, makeProjection, lineString, polygon, GRATICULE } from "../geo.js";
 
 /* ------------------------------------------------------------------ *
- * Phase 6 — the map, now real geography (src/geo.js), rendered as an
+ * Phase 6 — the map, real geography (src/geo.js), rendered as an
  * orthographic (globe-shaped) projection. Everything from Phase 1-3
  * (region glows, city fade-in, influence arcs) still works the same
  * way — it just reads projected [lon,lat] points instead of made-up
  * local x/y ones.
+ *
+ * Phase 7: an orthographic projection only shows one hemisphere, and
+ * Mesoamerica sits on the opposite side of the Earth from everything
+ * else on the map. `focus` switches between fixed viewing centers
+ * (src/geo.js's GLOBE_FOCI) rather than continuous drag-rotation.
  * ------------------------------------------------------------------ */
 
 export default function GlobeMap({ year, selected }) {
+  const [focus, setFocus] = useState("oldWorld");
+  const { pathGen, project, outline } = useMemo(() => makeProjection(focus), [focus]);
+
   const selText = selected ? TEXT_BY_ID[selected] : null;
-  const revealed = (t) => year >= t.start - 0.5;
 
   const regionGeom = useMemo(() => {
     return CULTURES.filter((c) => c.region?.length).map((c) => {
@@ -31,7 +38,7 @@ export default function GlobeMap({ year, selected }) {
       }));
       return { name: c.name, color: c.color, start: c.start, end: c.end, cx: center[0], cy: center[1], r };
     }).filter(Boolean);
-  }, []);
+  }, [project]);
 
   const cityRevealYear = useMemo(() => {
     const m = {};
@@ -48,6 +55,16 @@ export default function GlobeMap({ year, selected }) {
 
   return (
     <section style={S.mapWrap} aria-label="World map, real geography, ancient schematic style">
+      <div style={S.globeFocusToggle} role="tablist" aria-label="Which hemisphere to view">
+        {Object.entries(GLOBE_FOCI).map(([key, f]) => (
+          <button key={key}
+            style={{ ...S.globeFocusBtn, ...(focus === key ? S.globeFocusBtnActive : {}) }}
+            role="tab" aria-selected={focus === key} onClick={() => setFocus(key)}>
+            {f.label}
+          </button>
+        ))}
+      </div>
+
       <svg viewBox={`0 0 ${GLOBE_SIZE} ${GLOBE_SIZE}`} style={S.mapSvg} role="img">
         <defs>
           <radialGradient id="land" cx="42%" cy="38%" r="75%">
@@ -68,10 +85,10 @@ export default function GlobeMap({ year, selected }) {
         </defs>
 
         {/* the globe itself */}
-        <path d={pathGen(GLOBE_OUTLINE)} fill="url(#land)" stroke="#4b4230" strokeWidth="1.5" />
+        <path d={pathGen(outline)} fill="url(#land)" stroke="#4b4230" strokeWidth="1.5" />
         <path d={pathGen(GRATICULE)} fill="none" stroke="#4b4230" strokeWidth="0.5" opacity="0.35" />
 
-        {/* Zagros mountains, schematic */}
+        {/* Zagros / Himalaya mountains, schematic */}
         {MOUNTAINS.map((pt, i) => {
           const p = project(pt);
           if (!p) return null;
@@ -152,8 +169,10 @@ export default function GlobeMap({ year, selected }) {
 
       <div style={S.mapNote}>
         Real latitude/longitude, projected as a globe — not a modern political map: no modern
-        borders, no satellite imagery, just hand-simplified coasts, rivers, and mountains. Positions
-        stay approximate, for orientation rather than survey accuracy.
+        borders, no satellite imagery, just hand-simplified coasts, rivers, and mountains. An
+        orthographic globe only shows one hemisphere at a time, so use the {GLOBE_FOCI.oldWorld.label}/
+        {GLOBE_FOCI.americas.label} switch above to see the other side. Positions stay approximate,
+        for orientation rather than survey accuracy.
       </div>
 
       <div style={S.legend}>

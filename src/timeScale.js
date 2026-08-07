@@ -16,9 +16,9 @@
  * ------------------------------------------------------------------ */
 
 export const TIME_ZONES = [
-  { label: "Ancient world", start: -2600, end: 150, widthFrac: 0.78 },
-  { label: "Late Antique – Medieval", start: 150, end: 1500, widthFrac: 0.14 },
-  { label: "Early Modern – Present", start: 1500, end: 2026, widthFrac: 0.08 },
+  { label: "Ancient world", start: -2600, end: 150, widthFrac: 0.74 },
+  { label: "Late Antique – Medieval", start: 150, end: 1500, widthFrac: 0.16 },
+  { label: "Early Modern – Present", start: 1500, end: 2026, widthFrac: 0.10 },
 ];
 
 // Suggested axis tick years — denser where zones are narrow, so labels

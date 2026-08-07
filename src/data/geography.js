@@ -47,6 +47,17 @@ export const CITIES = {
 
   // Arabia (Phase 7)
   mecca: { lon: 39.83, lat: 21.42, label: "Mecca" },
+
+  // Norse — medieval Iceland (Phase 7)
+  skalholt: { lon: -20.55, lat: 64.13, label: "Skálholt" },
+  reykholt: { lon: -21.29, lat: 64.67, label: "Reykholt" },
+
+  // Mesoamerica — Americas focus (Phase 7)
+  qumarkaj: { lon: -91.15, lat: 15.03, label: "Q'umarkaj" },
+  tenochtitlan: { lon: -99.13, lat: 19.43, label: "Tenochtitlan" },
+
+  // West Africa (Phase 7)
+  ile_ife: { lon: 4.57, lat: 7.48, label: "Ile-Ife" },
 };
 
 // Simplified coastlines, as [lon, lat] point lists — GeoJSON polygons

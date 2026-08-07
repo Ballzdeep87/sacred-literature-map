@@ -20,6 +20,9 @@ export const LANES = [
   { id: "buddhist", label: "Buddhist", color: "#8a6f9a" },
   { id: "egyptian", label: "Egyptian", color: "#2f6b8a" },
   { id: "islamic", label: "Islamic", color: "#4a8f5f" },
+  { id: "norse", label: "Norse", color: "#4a7a9e" },
+  { id: "mesoamerican", label: "Mesoamerican", color: "#3fa89e" },
+  { id: "african", label: "West African", color: "#4a3f8a" },
 ];
 
 export const TEXT_LANE = {
@@ -60,4 +63,9 @@ export const TEXT_LANE = {
   coffin_texts: "egyptian",
   book_of_the_dead: "egyptian",
   quran: "islamic",
+  poetic_edda: "norse",
+  prose_edda: "norse",
+  popol_vuh: "mesoamerican",
+  legend_of_the_suns: "mesoamerican",
+  ifa_corpus: "african",
 };

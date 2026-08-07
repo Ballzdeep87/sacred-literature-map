@@ -34,6 +34,10 @@ export const S = {
   viewToggle: { display: "inline-flex", gap: "6px", background: "#171308", border: "1px solid #2b2718", borderRadius: "9px", padding: "4px", marginBottom: "16px" },
   viewToggleBtn: { display: "inline-flex", alignItems: "center", gap: "6px", background: "transparent", border: "none", borderRadius: "6px", padding: "7px 14px", fontSize: "12.5px", fontFamily: sans, color: "#a89d7d", cursor: "pointer", fontWeight: 600 },
   viewToggleBtnActive: { background: "#e6b84a", color: "#1a1509" },
+
+  globeFocusToggle: { display: "inline-flex", gap: "4px", background: "#0f0d08", border: "1px solid #2b2718", borderRadius: "7px", padding: "3px", marginBottom: "8px" },
+  globeFocusBtn: { background: "transparent", border: "none", borderRadius: "5px", padding: "5px 11px", fontSize: "11px", fontFamily: sans, color: "#8a815f", cursor: "pointer", fontWeight: 600 },
+  globeFocusBtnActive: { background: "#2b2718", color: "#e6b84a" },
   clockLabel: { fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase", color: "#8a815f" },
   clockValue: { fontSize: "26px", color: "#e6b84a", fontWeight: 600 },
 

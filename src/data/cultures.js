@@ -56,4 +56,15 @@ export const CULTURES = [
   // Phase 7 — first entry in the "all eras" pivot.
   { name: "Early Muslim community (Ummah)", start: 610, end: 632, color: "#4a8f5f",
     region: ["mecca"] },
+
+  // Isolated traditions (Phase 7) — no historical contact with anything
+  // above; visible only when the map's Americas focus includes them.
+  { name: "Medieval Icelanders", start: 800, end: 1270, color: "#4a7a9e",
+    region: ["skalholt", "reykholt"] },
+  { name: "K'iche' Maya", start: 1200, end: 1558, color: "#3fa89e",
+    region: ["qumarkaj"] },
+  { name: "Nahua (Aztec) peoples", start: 1325, end: 1570, color: "#2f8a80",
+    region: ["tenochtitlan"] },
+  { name: "Yoruba peoples", start: 1000, end: 1900, color: "#4a3f8a",
+    region: ["ile_ife"] },
 ];

@@ -68,7 +68,7 @@ export default function App() {
 
   // timeline geometry — non-linear scale (src/timeScale.js): the ancient
   // era gets most of the width, since that's where nearly all content is.
-  const TL_W = 1000, TL_H = 315, PAD_L = 8, PAD_R = 8, AXIS_Y = 275;
+  const TL_W = 1000, TL_H = 365, PAD_L = 8, PAD_R = 8, AXIS_Y = 328;
   const timeScale = makeTimeScale(TL_W - PAD_L - PAD_R);
   const tlX = (y) => PAD_L + timeScale(y);
   const bandTop = 10, bandH = 11, bandGap = 2;
@@ -84,9 +84,9 @@ export default function App() {
           <div style={S.kicker}>An interactive history · Phase 7</div>
           <h1 style={S.h1}>A Living Map of Sacred Literature</h1>
           <p style={S.sub}>
-            From the <em>Pyramid Texts</em> and <em>Kesh Temple Hymn</em> (c. 2600 BCE) toward the
-            present day — world religious literature across all eras, on one real-geography globe
-            and one (non-linear) timeline. Press play to let time move.
+            From the <em>Pyramid Texts</em> and <em>Kesh Temple Hymn</em> (c. 2600 BCE) to the
+            <em> Poetic Edda</em>, the <em>Popol Vuh</em>, and the <em>Ifá corpus</em> — traditions
+            with no historical contact at all, shown honestly as islands, not forced connections.
           </p>
         </div>
         <div style={S.clock}>
