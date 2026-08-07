@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Play, Pause, RotateCcw, Map as MapIcon, Share2 } from "lucide-react";
 
-import { CITIES, EUPHRATES, TIGRIS, MED_COAST, GULF } from "./data/geography.js";
 import { CULTURES } from "./data/cultures.js";
-import { TEXTS, TEXT_BY_ID, CONFIDENCE_COLOR, LINK_TIER } from "./data/texts.js";
+import { TEXTS, TEXT_BY_ID } from "./data/texts.js";
 import { YEAR_MIN, YEAR_MAX } from "./data/timeRange.js";
 import { fmtYear, fadeWeight } from "./utils.js";
 import { S, CSS } from "./styles.js";
 import InfoPanel from "./components/InfoPanel.jsx";
 import InfluenceWeb from "./components/InfluenceWeb.jsx";
+import GlobeMap from "./components/GlobeMap.jsx";
 
 /* ------------------------------------------------------------------ *
  * A Living Map of Sacred Literature
@@ -27,27 +27,6 @@ export default function App() {
   const lastRef = useRef(null);
 
   const YEARS_PER_SEC = 260;
-
-  // A soft glow per people/empire — centered and sized from the cities
-  // listed in its `region` (src/data/cultures.js), NOT a political border.
-  const regionGeom = useMemo(() => {
-    return CULTURES.filter((c) => c.region?.length).map((c) => {
-      const pts = c.region.map((id) => CITIES[id]).filter(Boolean);
-      const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
-      const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
-      const r = Math.max(75, ...pts.map((p) => Math.hypot(p.x - cx, p.y - cy) + 85));
-      return { name: c.name, color: c.color, start: c.start, end: c.end, cx, cy, r };
-    });
-  }, []);
-
-  // Earliest year each city is tied to a text — drives its gentle fade-in.
-  const cityRevealYear = useMemo(() => {
-    const m = {};
-    TEXTS.forEach((t) => {
-      if (m[t.city] === undefined || t.start < m[t.city]) m[t.city] = t.start;
-    });
-    return m;
-  }, []);
 
   useEffect(() => {
     if (!playing) return;
@@ -101,12 +80,12 @@ export default function App() {
 
       <header style={S.header}>
         <div>
-          <div style={S.kicker}>An interactive history · Phase 4</div>
+          <div style={S.kicker}>An interactive history · Phase 6</div>
           <h1 style={S.h1}>A Living Map of Sacred Literature</h1>
           <p style={S.sub}>
-            From the <em>Kesh Temple Hymn</em> (c. 2600 BCE) toward early Christianity. Press
-            play to let time move — texts light up as the world reaches them, and peoples'
-            presence rises and falls softly in the background.
+            From the <em>Kesh Temple Hymn</em> (c. 2600 BCE) toward early Christianity, now on a
+            real-geography globe as the map grows east toward South and East Asia. Press play to
+            let time move — texts light up as the world reaches them.
           </p>
         </div>
         <div style={S.clock}>
@@ -130,123 +109,7 @@ export default function App() {
         {view === "web" ? (
           <InfluenceWeb year={year} selected={selected} onSelect={setSelected} hover={hover} onHover={setHover} />
         ) : (
-        <section style={S.mapWrap} aria-label="Schematic map of the ancient Near East">
-          <svg viewBox="0 0 1000 620" style={S.mapSvg} role="img">
-            <defs>
-              <radialGradient id="land" cx="55%" cy="45%" r="75%">
-                <stop offset="0%" stopColor="#2a2418" />
-                <stop offset="100%" stopColor="#1c1810" />
-              </radialGradient>
-              <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#1b3a5b" />
-                <stop offset="100%" stopColor="#14283f" />
-              </linearGradient>
-              <filter id="soften" x="-60%" y="-60%" width="220%" height="220%">
-                <feGaussianBlur stdDeviation="16" />
-              </filter>
-            </defs>
-
-            <rect x="0" y="0" width="1000" height="620" fill="url(#land)" />
-
-            {/* Zagros mountains, east */}
-            {Array.from({ length: 9 }).map((_, i) => {
-              const bx = 786 + (i % 3) * 26;
-              const by = 120 + i * 52;
-              return (
-                <path key={i} d={`M${bx} ${by} l26 -34 l26 34 z`} fill="#3a3324" stroke="#4b4230" strokeWidth="1.5" />
-              );
-            })}
-
-            {/* seas */}
-            <path d={MED_COAST} fill="url(#water)" />
-            <path d={GULF} fill="url(#water)" />
-            <text x="80" y="300" style={S.seaLabel} transform="rotate(-90 80 300)">Mediterranean</text>
-            <text x="840" y="600" style={S.seaLabel}>Persian Gulf</text>
-
-            {/* rivers */}
-            <path d={EUPHRATES} fill="none" stroke="#3f7fb0" strokeWidth="4.5" strokeLinecap="round" opacity="0.85" />
-            <path d={TIGRIS} fill="none" stroke="#3f7fb0" strokeWidth="4.5" strokeLinecap="round" opacity="0.85" />
-            <text x="470" y="330" style={S.riverLabel}>Euphrates</text>
-            <text x="690" y="360" style={S.riverLabel}>Tigris</text>
-
-            {/* peoples/empires — soft blurred glows sized from their cities,
-                NOT political borders. Each fades gently in and out as `year`
-                approaches and leaves its span (see cultures.js's `region` note). */}
-            {regionGeom.map((c) => {
-              const w = fadeWeight(year, c.start, c.end);
-              if (w <= 0.02) return null;
-              return (
-                <circle key={c.name} cx={c.cx} cy={c.cy} r={c.r} fill={c.color}
-                  opacity={w * 0.3} filter="url(#soften)" />
-              );
-            })}
-
-            {/* influence arcs from selected text's sources — line style follows
-                each influence's tier: solid = documented, dashed = probable,
-                dotted = debated/speculative (see PROJECT-BRIEF.md.pdf section 4) */}
-            {selText &&
-              selText.influences.map((inf, i) => {
-                const from = CITIES[TEXT_BY_ID[inf.from]?.city];
-                const to = CITIES[selText.city];
-                if (!from || !to) return null;
-                const mx = (from.x + to.x) / 2;
-                const my = (from.y + to.y) / 2 - 70;
-                const dash = LINK_TIER[inf.tier]?.dash;
-                return (
-                  <path
-                    key={i}
-                    d={`M${from.x} ${from.y} Q ${mx} ${my} ${to.x} ${to.y}`}
-                    fill="none" stroke="#e6b84a" strokeWidth="2"
-                    strokeDasharray={dash || undefined}
-                    opacity="0.9" className={dash ? "arc" : ""}
-                  />
-                );
-              })}
-
-            {/* cities — fade in gently over the 60 years before their
-                earliest associated text, rather than switching on abruptly */}
-            {Object.entries(CITIES).map(([id, c]) => {
-              const revealYear = cityRevealYear[id];
-              const w = revealYear === undefined ? 0 : Math.min(1, Math.max(0, (year - revealYear + 60) / 60));
-              const lit = w > 0.5;
-              const isSel = selText && (selText.city === id || selText.influences.some((f) => TEXT_BY_ID[f.from]?.city === id));
-              return (
-                <g key={id} opacity={0.32 + w * 0.68}>
-                  <circle cx={c.x} cy={c.y} r={isSel ? 7 : 4.5}
-                    fill={lit ? "#e6b84a" : "#6b6350"}
-                    stroke={isSel ? "#fff3d0" : "none"} strokeWidth="2"
-                    className={isSel ? "pulse" : ""} />
-                  <text x={c.x + 9} y={c.y + 4} style={{ ...S.cityLabel, fill: lit ? "#e9e0c8" : "#7c745f" }}>
-                    {c.label}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-          <div style={S.mapNote}>
-            Schematic — city positions are approximate, meant for orientation rather than survey accuracy.
-            The soft colored glows are a rough sense of where each people/empire was active, sized from
-            their associated cities — not political borders, and not claims about any precise extent.
-          </div>
-
-          <div style={S.legend}>
-            <div style={S.legendGroup}>
-              <span style={S.legendLabel}>Confidence:</span>
-              {Object.entries(CONFIDENCE_COLOR).map(([tier, color]) => (
-                <span key={tier} style={S.legendItem}>
-                  <span style={{ ...S.legendDot, background: color }} />
-                  {tier}
-                </span>
-              ))}
-            </div>
-            <div style={S.legendGroup}>
-              <span style={S.legendLabel}>Influence line:</span>
-              <span style={S.legendItem}><span className="legend-line" /> documented</span>
-              <span style={S.legendItem}><span className="legend-line legend-line--dashed" /> probable</span>
-              <span style={S.legendItem}><span className="legend-line legend-line--dotted" /> debated / speculative</span>
-            </div>
-          </div>
-        </section>
+          <GlobeMap year={year} selected={selected} />
         )}
 
         <InfoPanel selText={selText} onClose={() => setSelected(null)} onSelect={setSelected} />
