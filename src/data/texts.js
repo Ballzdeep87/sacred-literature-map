@@ -644,6 +644,26 @@ export const TEXTS = [
       { from: "coffin_texts", tier: "documented", note: "Draws its core spells substantially from the Coffin Texts corpus — the direct textual bridge between the two.", source: "Faulkner, The Ancient Egyptian Coffin Texts (1973–1978)" },
     ],
   },
+
+  // ---- Phase 7: world religious literature across all eras ----
+  {
+    id: "quran",
+    title: "Quran",
+    start: 610, end: 632,
+    display: "revealed c. 610–632 CE; standardized as a single written text c. 650 CE under Caliph Uthman",
+    confidence: "debated",
+    claimType: "alternative view",
+    city: "mecca",
+    origin: "Revealed first in Mecca, then in Medina, over roughly two decades",
+    civ: "Early Muslim community (Ummah)", language: "Classical Arabic", script: "Arabic script",
+    tradition: "Islam", genre: "Scripture (revelation)",
+    summary: "114 chapters (surahs) that Muslims hold to have been revealed to Muhammad by God through the angel Gabriel, first in Mecca and then in Medina.",
+    significance: "The foundational scripture of Islam, and by many counts the most-read book in the world. It explicitly names the Torah and the Gospel as earlier revelation and positions itself as confirming and correcting them — the traditional account of its swift standardization under Caliph Uthman is broadly accepted, but the finer details of its compilation history are a genuinely active area of historical-critical scholarship.",
+    sources: ["Abdel Haleem (trans.), The Qur'an, Oxford World's Classics (2004)", "Neuwirth, The Qur'an and Late Antiquity: A Shared Heritage (Oxford, 2019 Eng. trans.)"],
+    influences: [
+      { from: "torah", tier: "probable", note: "Extensively retells Genesis and Exodus narratives (Abraham, Moses, Joseph) and names the Torah directly as revelation given to Moses; the exact transmission route — oral, via Jewish and Christian communities in Late Antique Arabia — is debated, but the engagement itself is explicit in the text.", source: "Neuwirth, The Qur'an and Late Antiquity (2019)" },
+    ],
+  },
 ];
 
 export const TEXT_BY_ID = Object.fromEntries(TEXTS.map((t) => [t.id, t]));

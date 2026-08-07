@@ -52,4 +52,8 @@ export const CULTURES = [
     region: ["zhou", "guodian", "qufu"] },
   { name: "Early Buddhist community (Sangha)", start: -450, end: 100, color: "#8a6f9a",
     region: ["ganges_plain", "sri_lanka"] },
+
+  // Phase 7 — first entry in the "all eras" pivot.
+  { name: "Early Muslim community (Ummah)", start: 610, end: 632, color: "#4a8f5f",
+    region: ["mecca"] },
 ];

@@ -44,6 +44,9 @@ export const CITIES = {
   memphis: { lon: 31.251, lat: 29.844, label: "Memphis" },
   deir_el_bersha: { lon: 30.82, lat: 27.78, label: "Deir el-Bersha" },
   thebes: { lon: 32.60, lat: 25.72, label: "Thebes" },
+
+  // Arabia (Phase 7)
+  mecca: { lon: 39.83, lat: 21.42, label: "Mecca" },
 };
 
 // Simplified coastlines, as [lon, lat] point lists — GeoJSON polygons

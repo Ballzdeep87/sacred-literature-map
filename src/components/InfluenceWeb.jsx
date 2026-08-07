@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { TEXTS, TEXT_BY_ID, LINK_TIER } from "../data/texts.js";
 import { LANES, TEXT_LANE } from "../data/lanes.js";
-import { YEAR_MIN, YEAR_MAX } from "../data/timeRange.js";
+import { makeTimeScale, TIME_TICKS } from "../timeScale.js";
 import { fmtYear } from "../utils.js";
 import { S } from "../styles.js";
 
@@ -22,7 +22,8 @@ const LANE_H = 96;
 const ROW_GAP = 24;
 const AXIS_Y_GAP = 30;
 
-const tlX = (y) => PAD_L + ((y - YEAR_MIN) / (YEAR_MAX - YEAR_MIN)) * (W - PAD_L - PAD_R);
+const timeScale = makeTimeScale(W - PAD_L - PAD_R);
+const tlX = (y) => PAD_L + timeScale(y);
 
 // Greedy row-packing so nodes close in time within the same lane don't
 // overlap — the classic "interval scheduling" trick, not a claim about
@@ -79,10 +80,6 @@ export default function InfluenceWeb({ year, selected, onSelect, hover, onHover 
 
   const revealWeight = (t) => Math.min(1, Math.max(0, (year - t.start + 60) / 60));
 
-  const ticks = [];
-  for (let y = -2500; y <= 0; y += 500) ticks.push(y);
-  ticks.push(YEAR_MIN); ticks.push(1); [50, 100, 150].forEach((y) => ticks.push(y));
-
   const selText = selected ? TEXT_BY_ID[selected] : null;
   const AXIS_Y = totalHeight - AXIS_Y_GAP + 6;
 
@@ -107,7 +104,7 @@ export default function InfluenceWeb({ year, selected, onSelect, hover, onHover 
 
         {/* axis */}
         <line x1={PAD_L} y1={AXIS_Y} x2={W - PAD_R} y2={AXIS_Y} stroke="#2b2718" strokeWidth="1.5" />
-        {ticks.map((y) => (
+        {TIME_TICKS.map((y) => (
           <text key={y} x={tlX(y)} y={AXIS_Y + 16} style={S.tick}>{fmtYear(y)}</text>
         ))}
 

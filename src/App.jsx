@@ -4,6 +4,7 @@ import { Play, Pause, RotateCcw, Map as MapIcon, Share2 } from "lucide-react";
 import { CULTURES } from "./data/cultures.js";
 import { TEXTS, TEXT_BY_ID } from "./data/texts.js";
 import { YEAR_MIN, YEAR_MAX } from "./data/timeRange.js";
+import { makeTimeScale, TIME_TICKS } from "./timeScale.js";
 import { fmtYear, fadeWeight } from "./utils.js";
 import { S, CSS } from "./styles.js";
 import InfoPanel from "./components/InfoPanel.jsx";
@@ -65,14 +66,14 @@ export default function App() {
   const revealed = (t) => year >= t.start - 0.5;
   const selText = selected ? TEXT_BY_ID[selected] : null;
 
-  // timeline geometry
-  const TL_W = 1000, TL_H = 300, PAD_L = 8, PAD_R = 8, AXIS_Y = 262;
-  const tlX = (y) => PAD_L + ((y - YEAR_MIN) / (YEAR_MAX - YEAR_MIN)) * (TL_W - PAD_L - PAD_R);
+  // timeline geometry — non-linear scale (src/timeScale.js): the ancient
+  // era gets most of the width, since that's where nearly all content is.
+  const TL_W = 1000, TL_H = 315, PAD_L = 8, PAD_R = 8, AXIS_Y = 275;
+  const timeScale = makeTimeScale(TL_W - PAD_L - PAD_R);
+  const tlX = (y) => PAD_L + timeScale(y);
   const bandTop = 10, bandH = 11, bandGap = 2;
 
-  const ticks = [];
-  for (let y = -2500; y <= 0; y += 500) ticks.push(y);
-  ticks.push(-2600); ticks.push(1); [50, 100, 150].forEach((y) => ticks.push(y));
+  const ticks = TIME_TICKS;
 
   return (
     <div style={S.root}>
@@ -80,12 +81,12 @@ export default function App() {
 
       <header style={S.header}>
         <div>
-          <div style={S.kicker}>An interactive history · Phase 6</div>
+          <div style={S.kicker}>An interactive history · Phase 7</div>
           <h1 style={S.h1}>A Living Map of Sacred Literature</h1>
           <p style={S.sub}>
-            From the <em>Pyramid Texts</em> and <em>Kesh Temple Hymn</em> (c. 2600 BCE) to the
-            <em> Rigveda</em>, the <em>Analects</em>, and the <em>Pali Canon</em> further east — one
-            real-geography globe, one timeline. Press play to let time move.
+            From the <em>Pyramid Texts</em> and <em>Kesh Temple Hymn</em> (c. 2600 BCE) toward the
+            present day — world religious literature across all eras, on one real-geography globe
+            and one (non-linear) timeline. Press play to let time move.
           </p>
         </div>
         <div style={S.clock}>

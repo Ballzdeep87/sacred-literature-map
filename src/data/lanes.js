@@ -19,6 +19,7 @@ export const LANES = [
   { id: "chinese", label: "Chinese", color: "#a8452e" },
   { id: "buddhist", label: "Buddhist", color: "#8a6f9a" },
   { id: "egyptian", label: "Egyptian", color: "#2f6b8a" },
+  { id: "islamic", label: "Islamic", color: "#4a8f5f" },
 ];
 
 export const TEXT_LANE = {
@@ -58,4 +59,5 @@ export const TEXT_LANE = {
   ptahhotep: "egyptian",
   coffin_texts: "egyptian",
   book_of_the_dead: "egyptian",
+  quran: "islamic",
 };
