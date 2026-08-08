@@ -68,4 +68,8 @@ export const TEXT_LANE = {
   popol_vuh: "mesoamerican",
   legend_of_the_suns: "mesoamerican",
   ifa_corpus: "african",
+  mishnah: "jewish",
+  talmud: "jewish",
+  sahih_bukhari: "islamic",
+  nicene_creed: "christian",
 };

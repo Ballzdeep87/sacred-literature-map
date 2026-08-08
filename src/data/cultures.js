@@ -30,6 +30,10 @@ export const CULTURES = [
     region: ["ugarit"] },
   { name: "Israelites & Judeans", start: -1200, end: -586, color: "#5b8dd9",
     region: ["jerusalem", "qumran"] },
+  // The Temple's destruction (70 CE) ends the "Israelites & Judeans" era
+  // above; Judaism's story continues here, reorganized around study.
+  { name: "Rabbinic Jewish diaspora", start: 70, end: 600, color: "#3f6f9e",
+    region: ["sepphoris", "sura"] },
   // Persian and Hellenistic extents are shown wide and soft on purpose —
   // both empires really did span from Bactria to the Levant — but this
   // is still a rough gesture, not a claim about any precise border.
@@ -43,6 +47,10 @@ export const CULTURES = [
   { name: "Romans", start: -63, end: 300, color: "#a85a5a",
     region: ["antioch", "ugarit", "jerusalem", "alexandria"] },
   { name: "Early Christians", start: 30, end: 300, color: "#d98b3f" },
+  // Marks the shift from a persecuted, decentralized movement to an
+  // empire-sponsored, doctrinally standardized religion.
+  { name: "Nicene Christianity (Roman Empire)", start: 300, end: 400, color: "#c98a5f",
+    region: ["nicaea", "antioch"] },
 
   // Far Eastern traditions (Phase 6b) — same rules as above: soft,
   // fuzzy regions sized from their cities, not political borders.
@@ -56,6 +64,8 @@ export const CULTURES = [
   // Phase 7 — first entry in the "all eras" pivot.
   { name: "Early Muslim community (Ummah)", start: 610, end: 632, color: "#4a8f5f",
     region: ["mecca"] },
+  { name: "Abbasid-era Muslim scholars", start: 750, end: 900, color: "#3f9e6f",
+    region: ["bukhara"] },
 
   // Isolated traditions (Phase 7) — no historical contact with anything
   // above; visible only when the map's Americas focus includes them.

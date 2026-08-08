@@ -754,6 +754,80 @@ export const TEXTS = [
     sources: ["Abimbola, Ifá: An Exposition of Ifá Literary Corpus (Oxford University Press Nigeria, 1976)", "Bascom, Ifa Divination: Communication Between Gods and Men in West Africa (Indiana University Press, 1969)"],
     influences: [],
   },
+
+  // ---- Phase 7d: the "next chapter" of three already-connected
+  // traditions, per PROJECT-BRIEF.md.pdf's "prioritize connected
+  // traditions" rule — filling gaps in the existing web rather than
+  // reaching for another isolated one. ----
+  {
+    id: "mishnah",
+    title: "Mishnah",
+    start: 200, end: 200, display: "compiled c. 200 CE by Judah ha-Nasi, from oral legal tradition reaching back centuries",
+    confidence: "probable",
+    claimType: "consensus",
+    city: "sepphoris",
+    origin: "Compiled in Roman Galilee, traditionally at Sepphoris or Beit Shearim, by Rabbi Judah ha-Nasi",
+    civ: "Rabbinic Jewish community", language: "Mishnaic Hebrew", script: "Hebrew square script",
+    tradition: "Rabbinic Judaism", genre: "Legal code (oral law codified)",
+    summary: "A systematic law code organizing Jewish legal tradition into six orders covering agriculture, festivals, family law, civil law, temple ritual, and purity — the foundational text of Rabbinic Judaism.",
+    significance: "Written after the Temple's destruction (70 CE) ended sacrifice-based worship, the Mishnah reorganizes Israelite religious law around study and practice instead — the direct bridge from the biblical Torah to the vast rabbinic tradition, and eventually the Talmuds, that follows.",
+    sources: ["Neusner (trans.), The Mishnah: A New Translation (Yale, 1988)", "Strack & Stemberger, Introduction to the Talmud and Midrash, 2nd ed. (Fortress Press, 1996)"],
+    influences: [
+      { from: "torah", tier: "documented", note: "Structured explicitly as interpretation and application of Torah law — the Mishnah repeatedly cites and expands specific Torah commandments, organizing centuries of legal debate around them.", source: "Strack & Stemberger, Introduction to the Talmud and Midrash (1996)" },
+    ],
+  },
+  {
+    id: "talmud",
+    title: "Babylonian Talmud",
+    start: 500, end: 600, display: "redacted c. 500–600 CE in the Babylonian rabbinic academies, recording centuries of discussion of the Mishnah",
+    confidence: "debated",
+    claimType: "alternative view",
+    city: "sura",
+    origin: "The Jewish academies of Sura and Pumbedita in Sasanian-era Babylonia (modern Iraq)",
+    civ: "Babylonian rabbinic community", language: "Aramaic and Hebrew", script: "Hebrew square script",
+    tradition: "Rabbinic Judaism", genre: "Legal commentary & discussion (Gemara + Mishnah)",
+    summary: "A vast, multi-layered record of rabbinic debate and commentary on the Mishnah, mixing law, biblical interpretation, ethics, and narrative — the central text of Rabbinic Judaism ever since.",
+    significance: "Became, alongside the Hebrew Bible, the foundational text of Jewish learning and law for well over a millennium. Its exact editorial history — who shaped its final, highly stylized argumentative form, and when — is a genuinely live scholarly question.",
+    sources: ["Strack & Stemberger, Introduction to the Talmud and Midrash, 2nd ed. (Fortress Press, 1996)", "Epstein (ed.), The Soncino Talmud (1935–1952)"],
+    influences: [
+      { from: "mishnah", tier: "documented", note: "Structured explicitly as line-by-line commentary (Gemara) on the Mishnah's text — the Talmud literally incorporates the Mishnah within itself as its base layer.", source: "Strack & Stemberger, Introduction to the Talmud and Midrash (1996)" },
+    ],
+  },
+  {
+    id: "sahih_bukhari",
+    title: "Sahih al-Bukhari",
+    start: 846, end: 870, display: "compiled c. 846–870 CE by Muhammad al-Bukhari",
+    confidence: "debated",
+    claimType: "alternative view",
+    city: "bukhara",
+    origin: "Compiled by Muhammad al-Bukhari, born in Bukhara (Central Asia); he traveled extensively across the Islamic world collecting and testing hadith reports",
+    civ: "Abbasid-era Muslim scholars", language: "Classical Arabic", script: "Arabic script",
+    tradition: "Islam (Hadith / Sunnah)", genre: "Hadith collection",
+    summary: "A collection of roughly 7,000 hadith — reports of the sayings and actions of Muhammad — selected by al-Bukhari from several hundred thousand candidates using strict criteria for the reliability of each report's chain of transmission (isnad).",
+    significance: "Regarded by most Sunni Muslims as the most authoritative hadith collection after the Quran itself, and a primary source for Islamic law and practice. How reliably any individual hadith — even from Bukhari's collection — traces back to Muhammad's own lifetime is a genuinely major point of difference between traditional Islamic scholarship and Western historical-critical study of early Islam.",
+    sources: ["Brown, Hadith: Muhammad's Legacy in the Medieval and Modern World (Oneworld, 2009)", "Khan (trans.), Sahih al-Bukhari, 9 vols."],
+    influences: [
+      { from: "quran", tier: "probable", note: "Presented as the record of how Muhammad himself lived out and explained the Quran's teachings; later Islamic law treats hadith and Quran as complementary sources, though the hadith corpus is textually and historically distinct from the Quran itself.", source: "Brown, Hadith: Muhammad's Legacy (2009)" },
+    ],
+  },
+  {
+    id: "nicene_creed",
+    title: "Nicene Creed",
+    start: 325, end: 381, display: "formulated at the Council of Nicaea, 325 CE; expanded at the Council of Constantinople, 381 CE",
+    confidence: "well-established",
+    claimType: "evidence",
+    city: "nicaea",
+    origin: "The Council of Nicaea, convened by Emperor Constantine in the city of Nicaea (modern İznik, Turkey)",
+    civ: "Early Christian bishops (Roman Empire)", language: "Greek", script: "Greek",
+    tradition: "Early Christianity (institutional)", genre: "Creed (doctrinal statement)",
+    summary: "A short, formal statement of Christian belief about the nature of Jesus Christ's relationship to God the Father, adopted by bishops gathered from across the Roman Empire to settle the Arian controversy.",
+    significance: "Marks a turning point from the diverse, decentralized Christian writings earlier on this map (Paul's letters, the Gospels, Clement, the Didache) toward an empire-wide, institutionally enforced Christian orthodoxy — still recited in many churches today, essentially unchanged.",
+    sources: ["Kelly, Early Christian Creeds, 3rd ed. (Routledge, 1972)", "Ehrman, The New Testament (7th ed.)"],
+    influences: [
+      { from: "john", tier: "probable", note: "Its central language about Christ being 'begotten, not made' and 'of one substance with the Father' directly engages debates rooted in how to read John's Gospel's high view of Christ's identity.", source: "Kelly, Early Christian Creeds (1972)" },
+      { from: "paul", tier: "probable", note: "Draws on Pauline language and theology (e.g., Christ as agent of creation, the hymn in Philippians 2) in articulating Christ's relationship to God.", source: "Kelly, Early Christian Creeds (1972)" },
+    ],
+  },
 ];
 
 export const TEXT_BY_ID = Object.fromEntries(TEXTS.map((t) => [t.id, t]));

@@ -58,6 +58,12 @@ export const CITIES = {
 
   // West Africa (Phase 7)
   ile_ife: { lon: 4.57, lat: 7.48, label: "Ile-Ife" },
+
+  // Phase 7d — the "next chapter" of three already-connected traditions
+  sepphoris: { lon: 35.27, lat: 32.75, label: "Sepphoris" },
+  sura: { lon: 44.40, lat: 31.90, label: "Sura" },
+  bukhara: { lon: 64.42, lat: 39.77, label: "Bukhara" },
+  nicaea: { lon: 29.72, lat: 40.43, label: "Nicaea" },
 };
 
 // Simplified coastlines, as [lon, lat] point lists — GeoJSON polygons

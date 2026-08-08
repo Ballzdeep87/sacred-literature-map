@@ -68,7 +68,7 @@ export default function App() {
 
   // timeline geometry — non-linear scale (src/timeScale.js): the ancient
   // era gets most of the width, since that's where nearly all content is.
-  const TL_W = 1000, TL_H = 365, PAD_L = 8, PAD_R = 8, AXIS_Y = 328;
+  const TL_W = 1000, TL_H = 401, PAD_L = 8, PAD_R = 8, AXIS_Y = 366;
   const timeScale = makeTimeScale(TL_W - PAD_L - PAD_R);
   const tlX = (y) => PAD_L + timeScale(y);
   const bandTop = 10, bandH = 11, bandGap = 2;
