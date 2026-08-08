@@ -154,9 +154,9 @@ export default function App() {
           <div style={S.kicker}>An interactive history · Phase 7</div>
           <h1 style={S.h1}>A Living Map of Sacred Literature</h1>
           <p style={S.sub}>
-            From the <em>Pyramid Texts</em> and <em>Kesh Temple Hymn</em> (c. 2600 BCE) to the
-            <em> Poetic Edda</em>, the <em>Popol Vuh</em>, and the <em>Ifá corpus</em> — traditions
-            with no historical contact at all, shown honestly as islands, not forced connections.
+            An interactive map and timeline of how the world's religious literature developed —
+            from the <em>Kesh Temple Hymn</em> and <em>Pyramid Texts</em> (c. 2600 BCE) to medieval
+            scripture on four continents.
           </p>
         </div>
         <div style={S.clock}>

@@ -314,11 +314,8 @@ export default function GlobeMap({ year, selected, autoFocus = false }) {
       </svg>
 
       <div style={S.mapNote}>
-        Real coastlines, projected as a globe — not a modern political map: no modern borders,
-        no satellite imagery, just accurate coasts under hand-placed rivers, mountains, and cities.
-        Scroll or pinch to zoom in on a crowded cluster, drag to pan, and use the {GLOBE_FOCI.oldWorld.label}/
-        {GLOBE_FOCI.americas.label} switch above to see the other hemisphere. City and river positions
-        stay approximate, for orientation rather than survey accuracy.
+        Scroll or pinch to zoom into a crowded cluster, drag to pan, and switch hemispheres above.
+        Positions are approximate.
       </div>
 
       <div style={S.legend}>
