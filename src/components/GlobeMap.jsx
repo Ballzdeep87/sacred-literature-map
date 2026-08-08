@@ -1,4 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect, useCallback } from "react";
+import { zoom as d3zoom, zoomIdentity } from "d3-zoom";
+import { select } from "d3-selection";
 import { CITIES, SEAS, RIVERS, MOUNTAINS, LANDMASSES } from "../data/geography.js";
 import { CULTURES } from "../data/cultures.js";
 import { TEXTS, TEXT_BY_ID, CONFIDENCE_COLOR, LINK_TIER } from "../data/texts.js";
@@ -17,11 +19,48 @@ import { GLOBE_SIZE, GLOBE_FOCI, makeProjection, lineString, polygon, GRATICULE 
  * Mesoamerica sits on the opposite side of the Earth from everything
  * else on the map. `focus` switches between fixed viewing centers
  * (src/geo.js's GLOBE_FOCI) rather than continuous drag-rotation.
+ *
+ * Phase 8: scroll/pinch-to-zoom and drag-to-pan, via d3-zoom — used
+ * only for its pointer/wheel-to-transform math, the same spirit as
+ * d3-geo being used only for projection math (PROJECT-BRIEF.md.pdf
+ * section 5). Lets a dense cluster (Mesopotamia's 8 close-together
+ * cities, say) be zoomed in to roughly a several-hundred-mile view
+ * without touching the projection itself — just scale/pan the already-
+ * rendered map. Zoom/pan resets whenever `focus` changes, since a pan
+ * position from one hemisphere means nothing in the other.
  * ------------------------------------------------------------------ */
+
+const ZOOM_MIN = 1;
+const ZOOM_MAX = 12;
 
 export default function GlobeMap({ year, selected }) {
   const [focus, setFocus] = useState("oldWorld");
   const { pathGen, project, outline } = useMemo(() => makeProjection(focus), [focus]);
+
+  const svgRef = useRef(null);
+  const zoomBehaviorRef = useRef(null);
+  const [transform, setTransform] = useState({ x: 0, y: 0, k: 1 });
+
+  useEffect(() => {
+    const svgSel = select(svgRef.current);
+    const behavior = d3zoom()
+      .scaleExtent([ZOOM_MIN, ZOOM_MAX])
+      .on("zoom", (event) => {
+        const { x, y, k } = event.transform;
+        setTransform({ x, y, k });
+      });
+    svgSel.call(behavior);
+    zoomBehaviorRef.current = behavior;
+    return () => svgSel.on(".zoom", null);
+  }, []);
+
+  const resetView = useCallback(() => {
+    if (!zoomBehaviorRef.current || !svgRef.current) return;
+    zoomBehaviorRef.current.transform(select(svgRef.current), zoomIdentity);
+  }, []);
+
+  // A different hemisphere makes any current pan/zoom meaningless.
+  useEffect(() => { resetView(); }, [focus, resetView]);
 
   const selText = selected ? TEXT_BY_ID[selected] : null;
 
@@ -52,20 +91,26 @@ export default function GlobeMap({ year, selected }) {
   const gulfLabel = project([51.5, 26]);
   const euphratesLabel = project([41.5, 33.8]);
   const tigrisLabel = project([44.6, 34.2]);
+  const zoomedIn = transform.k > 1.05;
 
   return (
     <section style={S.mapWrap} aria-label="World map, real geography, ancient schematic style">
-      <div style={S.globeFocusToggle} role="tablist" aria-label="Which hemisphere to view">
-        {Object.entries(GLOBE_FOCI).map(([key, f]) => (
-          <button key={key}
-            style={{ ...S.globeFocusBtn, ...(focus === key ? S.globeFocusBtnActive : {}) }}
-            role="tab" aria-selected={focus === key} onClick={() => setFocus(key)}>
-            {f.label}
-          </button>
-        ))}
+      <div style={S.mapControls}>
+        <div style={S.globeFocusToggle} role="tablist" aria-label="Which hemisphere to view">
+          {Object.entries(GLOBE_FOCI).map(([key, f]) => (
+            <button key={key}
+              style={{ ...S.globeFocusBtn, ...(focus === key ? S.globeFocusBtnActive : {}) }}
+              role="tab" aria-selected={focus === key} onClick={() => setFocus(key)}>
+              {f.label}
+            </button>
+          ))}
+        </div>
+        {zoomedIn && (
+          <button style={S.resetViewBtn} onClick={resetView}>Reset view</button>
+        )}
       </div>
 
-      <svg viewBox={`0 0 ${GLOBE_SIZE} ${GLOBE_SIZE}`} style={S.mapSvg} role="img">
+      <svg ref={svgRef} viewBox={`0 0 ${GLOBE_SIZE} ${GLOBE_SIZE}`} style={{ ...S.mapSvg, cursor: "grab", touchAction: "none" }} role="img">
         <defs>
           <radialGradient id="land" cx="42%" cy="38%" r="75%">
             <stop offset="0%" stopColor="#2a2418" />
@@ -84,100 +129,104 @@ export default function GlobeMap({ year, selected }) {
           </filter>
         </defs>
 
-        {/* the globe itself */}
-        <path d={pathGen(outline)} fill="url(#land)" stroke="#4b4230" strokeWidth="1.5" />
-        <path d={pathGen(GRATICULE)} fill="none" stroke="#4b4230" strokeWidth="0.5" opacity="0.35" />
+        <g transform={`translate(${transform.x},${transform.y}) scale(${transform.k})`}>
+          {/* the globe itself */}
+          <path d={pathGen(outline)} fill="url(#land)" stroke="#4b4230" strokeWidth="1.5" />
+          <path d={pathGen(GRATICULE)} fill="none" stroke="#4b4230" strokeWidth="0.5" opacity="0.35" />
 
-        {/* Zagros / Himalaya mountains, schematic */}
-        {MOUNTAINS.map((pt, i) => {
-          const p = project(pt);
-          if (!p) return null;
-          return <path key={i} d={`M${p[0]} ${p[1]} l11 -15 l11 15 z`} fill="#3a3324" stroke="#4b4230" strokeWidth="1.2" />;
-        })}
+          {/* Zagros / Himalaya mountains, schematic */}
+          {MOUNTAINS.map((pt, i) => {
+            const p = project(pt);
+            if (!p) return null;
+            return <path key={i} d={`M${p[0]} ${p[1]} l11 -15 l11 15 z`} fill="#3a3324" stroke="#4b4230" strokeWidth="1.2" />;
+          })}
 
-        {/* seas */}
-        {Object.entries(SEAS).map(([id, coords]) => (
-          <path key={id} d={pathGen(polygon(coords))} fill="url(#water)" />
-        ))}
-        {medLabel && <text x={medLabel[0]} y={medLabel[1]} style={S.seaLabel}>Mediterranean</text>}
-        {gulfLabel && <text x={gulfLabel[0]} y={gulfLabel[1]} style={S.seaLabel}>Persian Gulf</text>}
+          {/* seas */}
+          {Object.entries(SEAS).map(([id, coords]) => (
+            <path key={id} d={pathGen(polygon(coords))} fill="url(#water)" />
+          ))}
+          {medLabel && <text x={medLabel[0]} y={medLabel[1]} style={S.seaLabel}>Mediterranean</text>}
+          {gulfLabel && <text x={gulfLabel[0]} y={gulfLabel[1]} style={S.seaLabel}>Persian Gulf</text>}
 
-        {/* small islands, drawn back on top of a sea (see LANDMASSES) */}
-        {Object.entries(LANDMASSES).map(([id, coords]) => (
-          <path key={id} d={pathGen(polygon(coords))} fill="url(#land)" stroke="#4b4230" strokeWidth="1" />
-        ))}
+          {/* small islands, drawn back on top of a sea (see LANDMASSES) */}
+          {Object.entries(LANDMASSES).map(([id, coords]) => (
+            <path key={id} d={pathGen(polygon(coords))} fill="url(#land)" stroke="#4b4230" strokeWidth="1" />
+          ))}
 
-        {/* rivers */}
-        {Object.entries(RIVERS).map(([id, coords]) => (
-          <path key={id} d={pathGen(lineString(coords))} fill="none" stroke="#3f7fb0" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
-        ))}
-        {euphratesLabel && <text x={euphratesLabel[0]} y={euphratesLabel[1]} style={S.riverLabel}>Euphrates</text>}
-        {tigrisLabel && <text x={tigrisLabel[0]} y={tigrisLabel[1]} style={S.riverLabel}>Tigris</text>}
+          {/* rivers */}
+          {Object.entries(RIVERS).map(([id, coords]) => (
+            <path key={id} d={pathGen(lineString(coords))} fill="none" stroke="#3f7fb0" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+          ))}
+          {euphratesLabel && <text x={euphratesLabel[0]} y={euphratesLabel[1]} style={S.riverLabel}>Euphrates</text>}
+          {tigrisLabel && <text x={tigrisLabel[0]} y={tigrisLabel[1]} style={S.riverLabel}>Tigris</text>}
 
-        {/* peoples/empires — soft blurred glows, not political borders */}
-        {regionGeom.map((c) => {
-          const w = fadeWeight(year, c.start, c.end);
-          if (w <= 0.02) return null;
-          return (
-            <circle key={c.name} cx={c.cx} cy={c.cy} r={c.r} fill={c.color}
-              opacity={w * 0.3} filter="url(#soften)" />
-          );
-        })}
-
-        {/* influence arcs from the selected text */}
-        {selText &&
-          selText.influences.map((inf, i) => {
-            const fromCity = CITIES[TEXT_BY_ID[inf.from]?.city];
-            const toCity = CITIES[selText.city];
-            if (!fromCity || !toCity) return null;
-            const from = project([fromCity.lon, fromCity.lat]);
-            const to = project([toCity.lon, toCity.lat]);
-            if (!from || !to) return null;
-            const mx = (from[0] + to[0]) / 2;
-            const my = (from[1] + to[1]) / 2 - 55;
-            const dash = LINK_TIER[inf.tier]?.dash;
+          {/* peoples/empires — soft blurred glows, not political borders */}
+          {regionGeom.map((c) => {
+            const w = fadeWeight(year, c.start, c.end);
+            if (w <= 0.02) return null;
             return (
-              <path
-                key={i}
-                d={`M${from[0]} ${from[1]} Q ${mx} ${my} ${to[0]} ${to[1]}`}
-                fill="none" stroke="#e6b84a" strokeWidth="2"
-                strokeDasharray={dash || undefined}
-                opacity="0.9" className={dash ? "arc" : ""}
-              />
+              <circle key={c.name} cx={c.cx} cy={c.cy} r={c.r} fill={c.color}
+                opacity={w * 0.3} filter="url(#soften)" />
             );
           })}
 
-        {/* cities */}
-        {Object.entries(CITIES).map(([id, c]) => {
-          const p = project([c.lon, c.lat]);
-          if (!p) return null;
-          const revealYear = cityRevealYear[id];
-          const w = revealYear === undefined ? 0 : Math.min(1, Math.max(0, (year - revealYear + 60) / 60));
-          const lit = w > 0.5;
-          const isSel = selText && (selText.city === id || selText.influences.some((f) => TEXT_BY_ID[f.from]?.city === id));
-          return (
-            <g key={id} opacity={0.32 + w * 0.68}>
-              <circle cx={p[0]} cy={p[1]} r={isSel ? 7 : 4.5}
-                fill={lit ? "#e6b84a" : "#6b6350"}
-                stroke={isSel ? "#fff3d0" : "none"} strokeWidth="2"
-                className={isSel ? "pulse" : ""} />
-              <text x={p[0] + 9} y={p[1] + 4} style={{ ...S.cityLabel, fill: lit ? "#e9e0c8" : "#7c745f" }}>
-                {c.label}
-              </text>
-            </g>
-          );
-        })}
+          {/* influence arcs from the selected text */}
+          {selText &&
+            selText.influences.map((inf, i) => {
+              const fromCity = CITIES[TEXT_BY_ID[inf.from]?.city];
+              const toCity = CITIES[selText.city];
+              if (!fromCity || !toCity) return null;
+              const from = project([fromCity.lon, fromCity.lat]);
+              const to = project([toCity.lon, toCity.lat]);
+              if (!from || !to) return null;
+              const mx = (from[0] + to[0]) / 2;
+              const my = (from[1] + to[1]) / 2 - 55;
+              const dash = LINK_TIER[inf.tier]?.dash;
+              return (
+                <path
+                  key={i}
+                  d={`M${from[0]} ${from[1]} Q ${mx} ${my} ${to[0]} ${to[1]}`}
+                  fill="none" stroke="#e6b84a" strokeWidth="2"
+                  strokeDasharray={dash || undefined}
+                  opacity="0.9" className={dash ? "arc" : ""}
+                />
+              );
+            })}
 
-        {/* vignette so the globe reads against the page background */}
+          {/* cities */}
+          {Object.entries(CITIES).map(([id, c]) => {
+            const p = project([c.lon, c.lat]);
+            if (!p) return null;
+            const revealYear = cityRevealYear[id];
+            const w = revealYear === undefined ? 0 : Math.min(1, Math.max(0, (year - revealYear + 60) / 60));
+            const lit = w > 0.5;
+            const isSel = selText && (selText.city === id || selText.influences.some((f) => TEXT_BY_ID[f.from]?.city === id));
+            return (
+              <g key={id} opacity={0.32 + w * 0.68}>
+                <circle cx={p[0]} cy={p[1]} r={isSel ? 7 : 4.5}
+                  fill={lit ? "#e6b84a" : "#6b6350"}
+                  stroke={isSel ? "#fff3d0" : "none"} strokeWidth="2"
+                  className={isSel ? "pulse" : ""} />
+                <text x={p[0] + 9} y={p[1] + 4} style={{ ...S.cityLabel, fill: lit ? "#e9e0c8" : "#7c745f" }}>
+                  {c.label}
+                </text>
+              </g>
+            );
+          })}
+        </g>
+
+        {/* vignette so the globe reads against the page background — kept
+            outside the zoom group, since it's a viewport edge effect, not
+            part of the map */}
         <circle cx={GLOBE_SIZE / 2} cy={GLOBE_SIZE / 2} r={GLOBE_SIZE / 2} fill="url(#space)" style={{ pointerEvents: "none" }} />
       </svg>
 
       <div style={S.mapNote}>
         Real latitude/longitude, projected as a globe — not a modern political map: no modern
-        borders, no satellite imagery, just hand-simplified coasts, rivers, and mountains. An
-        orthographic globe only shows one hemisphere at a time, so use the {GLOBE_FOCI.oldWorld.label}/
-        {GLOBE_FOCI.americas.label} switch above to see the other side. Positions stay approximate,
-        for orientation rather than survey accuracy.
+        borders, no satellite imagery, just hand-simplified coasts, rivers, and mountains. Scroll
+        or pinch to zoom in on a crowded cluster, drag to pan, and use the {GLOBE_FOCI.oldWorld.label}/
+        {GLOBE_FOCI.americas.label} switch above to see the other hemisphere. Positions stay
+        approximate, for orientation rather than survey accuracy.
       </div>
 
       <div style={S.legend}>
