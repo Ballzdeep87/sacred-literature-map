@@ -66,6 +66,10 @@ export const CULTURES = [
     region: ["mecca"] },
   { name: "Abbasid-era Muslim scholars", start: 750, end: 900, color: "#3f9e6f",
     region: ["bukhara"] },
+  // Mani's own lifetime — a deliberate synthesis of Zoroastrian,
+  // Christian, and Buddhist ideas into one new religion.
+  { name: "Manichaean community (Sasanian Empire)", start: 240, end: 274, color: "#8a3f6f",
+    region: ["ctesiphon"] },
 
   // Isolated traditions (Phase 7) — no historical contact with anything
   // above; visible only when the map's Americas focus includes them.

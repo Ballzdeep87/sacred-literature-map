@@ -828,6 +828,34 @@ export const TEXTS = [
       { from: "paul", tier: "probable", note: "Draws on Pauline language and theology (e.g., Christ as agent of creation, the hymn in Philippians 2) in articulating Christ's relationship to God.", source: "Kelly, Early Christian Creeds (1972)" },
     ],
   },
+
+  // ---- Phase 7e: Manichaeism — a deliberate synthesis, not a single-
+  // tradition addition. Mani explicitly claimed to complete a prophetic
+  // line running through Zoroaster, Buddha, and Jesus, giving one entry
+  // real, sourced links to four traditions already on this map. ----
+  {
+    id: "manichaean_scriptures",
+    title: "Manichaean Scriptures (Shabuhragan and the Living Gospel)",
+    start: 240, end: 274,
+    display: "composed by Mani c. 240s–270s CE; he was executed c. 274–277 CE (exact date debated)",
+    confidence: "well-established",
+    claimType: "evidence",
+    city: "ctesiphon",
+    origin: "Sasanian Mesopotamia; Mani grew up in a Jewish-Christian baptist community near Ctesiphon before his prophetic call, and the Shabuhragan was written for the Sasanian king Shapur I",
+    civ: "Sasanian Persia (Manichaean community)",
+    language: "Aramaic/Syriac (Mani's own writings); the Shabuhragan uniquely in Middle Persian",
+    script: "Manichaean script — a script Mani himself is credited with designing — and other regional scripts as the religion spread",
+    tradition: "Manichaeism", genre: "Scripture (revelation, composed by the prophet himself)",
+    summary: "Unusually among religious founders, Mani personally wrote his own scriptures rather than leaving that to later disciples — including the Shabuhragan, composed for the Sasanian king Shapur I, and the now-fragmentary 'Living Gospel.'",
+    significance: "Mani explicitly presented himself as the final prophet in a line that included Zoroaster, Buddha, and Jesus, deliberately building a single new religion out of elements from all three. The result spread from Rome (converting the young Augustine of Hippo for nine years) to Central Asia and medieval China — one of history's most geographically successful, and most thoroughly persecuted, new religious movements.",
+    sources: ["Gardner & Lieu (eds.), Manichaean Texts from the Roman Empire (Cambridge, 2004)", "Lieu, Manichaeism in the Later Roman Empire and Medieval China, 2nd ed. (Manchester/Brill, 1992)", "MacKenzie, 'Mani's Shabuhragan', BSOAS 42–43 (1979–1980)"],
+    influences: [
+      { from: "gathas", tier: "documented", note: "Mani explicitly named Zoroaster as one of his three prophetic predecessors, and Manichaeism's central cosmic dualism (light against darkness) draws substantially on Zoroastrian cosmology — both the self-claim and the doctrinal content are well documented.", source: "Lieu, Manichaeism in the Later Roman Empire (1992)" },
+      { from: "paul", tier: "probable", note: "Manichaean communities used and adapted a version of Paul's letters; Augustine, a Manichaean for nine years before his conversion, later wrote extensively against how Manichaeans read Paul.", source: "Gardner & Lieu, Manichaean Texts from the Roman Empire (2004)" },
+      { from: "john", tier: "probable", note: "Manichaeism's light-versus-darkness cosmology resonates closely with — and Manichaean texts drew on — the Gospel of John's own light/darkness imagery for Christ.", source: "Lieu, Manichaeism in the Later Roman Empire (1992)" },
+      { from: "pali_canon", tier: "debated", note: "Mani also named the Buddha as a prophetic predecessor, and later Manichaean missionaries in Central Asia adapted extensively to Buddhist vocabulary — though how much genuine Buddhist doctrine Mani himself knew directly, versus a rhetorical claim of universal succession, is discussed among scholars.", source: "Lieu, Manichaeism in the Later Roman Empire (1992)" },
+    ],
+  },
 ];
 
 export const TEXT_BY_ID = Object.fromEntries(TEXTS.map((t) => [t.id, t]));

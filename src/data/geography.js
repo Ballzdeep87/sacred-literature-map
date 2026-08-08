@@ -64,6 +64,10 @@ export const CITIES = {
   sura: { lon: 44.40, lat: 31.90, label: "Sura" },
   bukhara: { lon: 64.42, lat: 39.77, label: "Bukhara" },
   nicaea: { lon: 29.72, lat: 40.43, label: "Nicaea" },
+
+  // Phase 7e — Mani's Sasanian Mesopotamia, a hub connecting four
+  // traditions already on the map.
+  ctesiphon: { lon: 44.58, lat: 33.09, label: "Ctesiphon" },
 };
 
 // Simplified coastlines, as [lon, lat] point lists — GeoJSON polygons
