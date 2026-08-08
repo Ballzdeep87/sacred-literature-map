@@ -68,6 +68,15 @@ export const CITIES = {
   // Phase 7e — Mani's Sasanian Mesopotamia, a hub connecting four
   // traditions already on the map.
   ctesiphon: { lon: 44.58, lat: 33.09, label: "Ctesiphon" },
+
+  // Phase 13 — Homer (Ionia) and the Epic of Sundiata (Mali Empire).
+  // Homer's own birthplace is genuinely disputed in antiquity (seven
+  // rival cities claimed him); Smyrna is the modern scholarly favorite,
+  // on dialect and geographic-reference grounds — not a settled fact.
+  smyrna: { lon: 27.14, lat: 38.42, label: "Smyrna" },
+  // The Mali Empire's capital is itself debated among historians; Niani
+  // is the traditional, most-cited candidate.
+  niani: { lon: -8.38, lat: 11.38, label: "Niani" },
 };
 
 // Coastlines are real now (src/geo.js's WORLD_LAND, Phase 12) — SEAS and

@@ -856,6 +856,44 @@ export const TEXTS = [
       { from: "pali_canon", tier: "debated", note: "Mani also named the Buddha as a prophetic predecessor, and later Manichaean missionaries in Central Asia adapted extensively to Buddhist vocabulary — though how much genuine Buddhist doctrine Mani himself knew directly, versus a rhetorical claim of universal succession, is discussed among scholars.", source: "Lieu, Manichaeism in the Later Roman Empire (1992)" },
     ],
   },
+
+  // Phase 13 — the first two entries whose "text" IS the oral tradition
+  // itself, not just its earlier oral prehistory (contrast Popol Vuh,
+  // where the oral tradition predates a 16th-century written source).
+  {
+    id: "homeric_epics",
+    title: "The Iliad and The Odyssey",
+    start: -750, end: -650,
+    display: "oral tradition of unknown age behind them; poems reached their familiar form c. 750–650 BCE",
+    confidence: "probable",
+    claimType: "consensus",
+    city: "smyrna",
+    origin: "Ionia, the Greek-speaking coast of western Asia Minor; ancient tradition names Smyrna or Chios, among seven rival claimants",
+    civ: "Archaic Greeks", language: "Greek (Ionic, with Aeolic elements)", script: "Greek alphabet (adapted from Phoenician, c. 800 BCE)",
+    tradition: "Greek epic", genre: "Oral epic poetry",
+    summary: "The Trojan War (the Iliad) and Odysseus's ten-year journey home from it (the Odyssey) — composed and transmitted for generations by oral poets before reaching the form later Greeks knew as fixed text.",
+    significance: "The foundational works of Greek literature, and the primary evidence for oral-formulaic composition — Milman Parry and Albert Lord showed the poems' repeated epithets and formulas are the fingerprints of a living oral tradition, not a single writer's invention from nothing.",
+    sources: ["Lord, The Singer of Tales (Harvard, 1960)", "West (ed.), Homeri Ilias (Oxford Classical Texts, 1998–2000)", "Janko, The Iliad: A Commentary, Vol. IV (Cambridge, 1992)"],
+    influences: [
+      { from: "gilgamesh", tier: "debated", note: "M.L. West documented extensive parallels between the Iliad and Near Eastern epic — most strikingly Achilles and Gilgamesh, both sons of divine mothers who lose a beloved companion (Patroclus / Enkidu) and are visited by his ghost. Whether this reflects real transmission (via Bronze Age contact routes through Anatolia and Cyprus) or independent parallel development is actively debated among classicists.", source: "West, The East Face of Helicon (Oxford, 1997)" },
+    ],
+  },
+  {
+    id: "sundiata_epic",
+    title: "Epic of Sundiata (Sunjata)",
+    start: 1235, end: 1960,
+    display: "events c. 1235 CE; carried orally by griots for over seven centuries, first published in French translation in 1960",
+    confidence: "debated",
+    claimType: "alternative view",
+    city: "niani",
+    origin: "Mali Empire, West African savanna; Niani is the most-cited traditional capital, though its exact location remains debated among historians",
+    civ: "Mandinka (Malinke) people", language: "Mandinka (Manding)", script: "oral — no single fixed text; each griot's telling is a distinct performance",
+    tradition: "Mande oral epic tradition", genre: "Oral epic / dynastic history",
+    summary: "The rise of Sundiata Keita, founding ruler of the Mali Empire, from exiled and disabled prince to the victor of the Battle of Kirina (1235 CE) over the Sosso king Sumanguru Kanté — still performed today by griots (djeli), the hereditary oral historians of Mande society.",
+    significance: "One of West Africa's great epic traditions, and a rare case of a still-living oral epic with a genuine historical anchor: the Mali Empire it describes really did rise in 1235 and dominate West African trade for two centuries. Griots also preserve the Manden Charter (Kurukan Fuga), sometimes cited as among the earliest recorded human-rights declarations — though, like the epic itself, its exact original wording is a matter of oral transmission, not a fixed founding document.",
+    sources: ["Niane (trans. Pickett), Sundiata: An Epic of Old Mali (Longman, 1965; French orig. 1960)", "Austen (ed.), In Search of Sunjata: The Mande Oral Epic as History, Literature, and Performance (Indiana, 1999)"],
+    influences: [],
+  },
 ];
 
 export const TEXT_BY_ID = Object.fromEntries(TEXTS.map((t) => [t.id, t]));

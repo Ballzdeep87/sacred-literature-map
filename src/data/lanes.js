@@ -24,6 +24,7 @@ export const LANES = [
   { id: "mesoamerican", label: "Mesoamerican", color: "#3fa89e" },
   { id: "african", label: "West African", color: "#4a3f8a" },
   { id: "manichaean", label: "Manichaean", color: "#8a3f6f" },
+  { id: "greek", label: "Greek", color: "#5f8fa8" },
 ];
 
 export const TEXT_LANE = {
@@ -74,4 +75,6 @@ export const TEXT_LANE = {
   sahih_bukhari: "islamic",
   nicene_creed: "christian",
   manichaean_scriptures: "manichaean",
+  homeric_epics: "greek",
+  sundiata_epic: "african",
 };

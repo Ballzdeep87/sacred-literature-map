@@ -81,4 +81,10 @@ export const CULTURES = [
     region: ["tenochtitlan"] },
   { name: "Yoruba peoples", start: 1000, end: 1900, color: "#4a3f8a",
     region: ["ile_ife"] },
+
+  // Phase 13 — Homer and the Epic of Sundiata.
+  { name: "Archaic Greeks (Ionia)", start: -800, end: -480, color: "#5f8fa8",
+    region: ["smyrna"] },
+  { name: "Mali Empire", start: 1235, end: 1600, color: "#a87f3f",
+    region: ["niani"] },
 ];
