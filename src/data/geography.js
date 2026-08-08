@@ -110,20 +110,32 @@ export const SEAS = {
     [122, 22], [120, 18], [118, 14], [115, 10], [110, 8], [107, 10],
   ],
 
-  // Americas focus (Phase 7c) — Pacific and Gulf/Caribbean coasts,
-  // simplified; the Yucatán peninsula emerges as the land left between
-  // the two eastern seas, the same way Ugarit/Levant do between the
+  // Americas focus (Phase 7c, redrawn Phase 11) — Pacific and Gulf/
+  // Caribbean coasts, traced from real coastline shape (Mexico's Pacific
+  // coast, Isthmus of Tehuantepec, Yucatán, Central America down to
+  // Panama) rather than a rough guess, so Tenochtitlan and Q'umarkaj —
+  // both genuinely inland highland cities — read as inland, not coastal.
+  // The Yucatán peninsula emerges as the land left between the two
+  // eastern seas, the same way Ugarit/Levant do between the
   // Mediterranean and inland Mesopotamia above.
   pacificAmericas: [
-    [-106, 20], [-101, 17], [-96, 15], [-90, 13], [-85, 9], [-80, 8],
-    [-83, 6], [-90, 9], [-97, 13], [-103, 17], [-106, 20],
+    [-106.4, 23.2], [-105.3, 20.6], [-101.7, 17.9], [-99.9, 16.8],
+    [-97.1, 15.9], [-94.7, 16.2], [-92.2, 14.9], [-91.5, 14.0],
+    [-89.2, 13.2], [-87.0, 11.8], [-85.5, 10.0], [-84.0, 9.0],
+    [-82.9, 8.2], [-79.5, 8.9], [-77.3, 7.7],
+    [-82, 3], [-95, -2], [-110, 10], [-115, 20], [-112, 25],
+    [-106.4, 23.2],
   ],
   gulfOfMexico: [
-    [-97, 26], [-93, 28], [-89, 27], [-86, 24], [-88, 21], [-92, 19],
-    [-96, 19], [-97, 26],
+    [-97.4, 26.0], [-95.3, 28.9], [-91.9, 29.3], [-87.0, 28.0],
+    [-85.5, 24.0], [-86.3, 21.6], [-90.3, 19.3], [-94.0, 18.6],
+    [-95.9, 19.0], [-97.4, 22.2], [-97.4, 26.0],
   ],
   caribbeanSea: [
-    [-88, 18], [-85, 17], [-82, 15], [-84, 11], [-87, 13], [-88, 18],
+    [-86.8, 21.3], [-84.5, 21.5], [-82.0, 19.5], [-78.0, 17.0],
+    [-75.0, 12.0], [-77.3, 8.5], [-79.9, 9.4], [-81.8, 9.5],
+    [-82.6, 12.5], [-83.7, 14.9], [-87.9, 15.9], [-87.4, 19.0],
+    [-86.8, 21.3],
   ],
   // A generous box of open North Atlantic — Iceland (LANDMASSES.iceland
   // below) is drawn back on top of it, island-in-the-sea style.
@@ -139,6 +151,15 @@ export const LANDMASSES = {
   iceland: [
     [-22, 66.5], [-18, 66.4], [-14, 65.5], [-13.5, 64.3], [-15, 63.4],
     [-19, 63.4], [-22, 63.9], [-24, 64.9], [-23, 65.8], [-22, 66.5],
+  ],
+  // Baja California — no city sits here, but its absence was a big part
+  // of why the Americas coastline read as an unrecognizable blob rather
+  // than "Mexico." Traced up one side and down the other, same technique
+  // as Iceland above.
+  bajaCalifornia: [
+    [-117.1, 32.5], [-114.8, 31.8], [-114.2, 29.5], [-112.5, 27.0],
+    [-110.8, 24.3], [-109.9, 23.0], [-111.5, 24.5], [-113.5, 26.5],
+    [-115.5, 29.5], [-117.1, 32.5],
   ],
 };
 
