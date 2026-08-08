@@ -33,12 +33,13 @@ import { GLOBE_SIZE, GLOBE_FOCI, WORLD_LAND, makeProjection, lineString, GRATICU
 const ZOOM_MIN = 1;
 const ZOOM_MAX = 12;
 
-export default function GlobeMap({ year, selected }) {
+export default function GlobeMap({ year, selected, autoFocus = false }) {
   const [focus, setFocus] = useState("oldWorld");
   const { pathGen, project, outline } = useMemo(() => makeProjection(focus), [focus]);
 
   const svgRef = useRef(null);
   const zoomBehaviorRef = useRef(null);
+  const tweenRef = useRef(null);
   const [transform, setTransform] = useState({ x: 0, y: 0, k: 1 });
 
   useEffect(() => {
@@ -80,6 +81,50 @@ export default function GlobeMap({ year, selected }) {
     });
     if (shownIn) setFocus(shownIn);
   }, [selText, project, focus]);
+
+  // Tour mode (App.jsx's `autoFocus`) — pan/zoom to whatever's newly
+  // selected, so someone just watching doesn't have to find it themselves.
+  // Hand-rolled tween (requestAnimationFrame + zoomBehavior.transform each
+  // frame) rather than d3-zoom's own .transition(), which needs the
+  // separate d3-transition package — this keeps it to the same "d3 for
+  // math only" footprint as the rest of the map.
+  useEffect(() => {
+    if (!autoFocus || !selText) return;
+    const city = CITIES[selText.city];
+    if (!city) return;
+    const target = project([city.lon, city.lat]);
+    // Not visible in the current hemisphere yet — the effect above will
+    // flip `focus`, which changes `project` and re-runs this effect.
+    if (!target) return;
+
+    if (tweenRef.current) cancelAnimationFrame(tweenRef.current);
+
+    const targetK = 3.2;
+    const targetX = GLOBE_SIZE / 2 - target[0] * targetK;
+    const targetY = GLOBE_SIZE / 2 - target[1] * targetK;
+    const start = { ...transform };
+    const startTime = performance.now();
+    const DURATION = 900;
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+    const svgSel = select(svgRef.current);
+
+    const tick = (now) => {
+      const t = Math.min(1, (now - startTime) / DURATION);
+      const e = easeOutCubic(t);
+      const x = start.x + (targetX - start.x) * e;
+      const y = start.y + (targetY - start.y) * e;
+      const k = start.k + (targetK - start.k) * e;
+      if (zoomBehaviorRef.current) zoomBehaviorRef.current.transform(svgSel, zoomIdentity.translate(x, y).scale(k));
+      tweenRef.current = t < 1 ? requestAnimationFrame(tick) : null;
+    };
+    tweenRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (tweenRef.current) cancelAnimationFrame(tweenRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `transform` is
+    // read once as the tween's start point, not a trigger to re-run on.
+  }, [autoFocus, selText, project]);
 
   const regionGeom = useMemo(() => {
     return CULTURES.filter((c) => c.region?.length).map((c) => {

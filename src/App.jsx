@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { Play, Pause, RotateCcw, Map as MapIcon, Share2 } from "lucide-react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { Play, Pause, RotateCcw, Map as MapIcon, Share2, Film, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 import { CULTURES } from "./data/cultures.js";
 import { TEXTS, TEXT_BY_ID } from "./data/texts.js";
@@ -37,6 +37,58 @@ export default function App() {
   const lastRef = useRef(null);
 
   const YEARS_PER_SEC = 260;
+
+  // Tour mode — Play just scrubs the year and lets things fade in; a
+  // documentary-style pass for people who'd rather watch than click needs
+  // to actually stop on each text long enough to read it, and show where
+  // it happened. Steps through every text chronologically, dwelling on
+  // each one; GlobeMap does the actual pan/zoom (its `autoFocus` prop).
+  const TOUR_DWELL_MS = 5000;
+  const [tourActive, setTourActive] = useState(false);
+  const [tourPaused, setTourPaused] = useState(false);
+  const [tourIndex, setTourIndex] = useState(0);
+  const tourTexts = useMemo(() => [...TEXTS].sort((a, b) => a.start - b.start), []);
+
+  const startTour = useCallback(() => {
+    setPlaying(false);
+    setView("map");
+    setTourIndex(0);
+    setTourPaused(false);
+    setTourActive(true);
+  }, []);
+
+  const exitTour = useCallback(() => {
+    setTourActive(false);
+    setTourPaused(false);
+  }, []);
+
+  const tourGoTo = useCallback((i) => {
+    setTourIndex(Math.max(0, Math.min(tourTexts.length - 1, i)));
+    setTourPaused(false);
+  }, [tourTexts.length]);
+
+  // Jump the year/selection to whichever stop is current — the single
+  // place tourIndex actually takes effect, whether it moved by the dwell
+  // timer below or a manual Prev/Next click.
+  useEffect(() => {
+    if (!tourActive) return;
+    const t = tourTexts[tourIndex];
+    if (!t) return;
+    setYear(t.start);
+    setSelected(t.id);
+  }, [tourActive, tourIndex, tourTexts]);
+
+  // The dwell timer — advances to the next stop after TOUR_DWELL_MS,
+  // unless paused. Ends the tour after the last text rather than looping,
+  // so it reads as "the tour is over," not a glitch.
+  useEffect(() => {
+    if (!tourActive || tourPaused) return;
+    const timer = setTimeout(() => {
+      if (tourIndex >= tourTexts.length - 1) exitTour();
+      else setTourIndex((i) => i + 1);
+    }, TOUR_DWELL_MS);
+    return () => clearTimeout(timer);
+  }, [tourActive, tourPaused, tourIndex, tourTexts.length, exitTour]);
 
   // Keep the URL in sync so any entry can be shared as a direct link —
   // replaceState (not push) so clicking around the map doesn't spam browser history.
@@ -131,7 +183,7 @@ export default function App() {
         {view === "web" ? (
           <InfluenceWeb year={year} selected={selected} onSelect={setSelected} hover={hover} onHover={setHover} />
         ) : (
-          <GlobeMap year={year} selected={selected} />
+          <GlobeMap year={year} selected={selected} autoFocus={tourActive} />
         )}
 
         <InfoPanel selText={selText} onClose={() => setSelected(null)} onSelect={setSelected} />
@@ -201,17 +253,37 @@ export default function App() {
         </div>
 
         {/* transport */}
-        <div style={S.transport}>
-          <button style={S.playBtn} onClick={togglePlay} aria-label={playing ? "Pause" : "Play"}>
-            {playing ? <Pause size={18} /> : <Play size={18} />}
-            <span>{playing ? "Pause" : year >= YEAR_MAX ? "Replay" : "Play"}</span>
-          </button>
-          <button style={S.iconBtn} onClick={reset} aria-label="Reset to the beginning"><RotateCcw size={16} /></button>
-          <input type="range" min={YEAR_MIN} max={YEAR_MAX} step={1} value={Math.round(year)}
-            onChange={(e) => { setPlaying(false); setYear(Number(e.target.value)); }}
-            style={S.slider} aria-label="Scrub through time" />
-          <div style={S.yearReadout}>{fmtYear(year)}</div>
-        </div>
+        {tourActive ? (
+          <div style={S.transport}>
+            <button style={S.playBtn} onClick={() => setTourPaused((p) => !p)} aria-label={tourPaused ? "Resume tour" : "Pause tour"}>
+              {tourPaused ? <Play size={18} /> : <Pause size={18} />}
+              <span>{tourPaused ? "Resume" : "Touring"}</span>
+            </button>
+            <button style={S.iconBtn} onClick={() => tourGoTo(tourIndex - 1)} aria-label="Previous stop" disabled={tourIndex === 0}>
+              <ChevronLeft size={16} />
+            </button>
+            <button style={S.iconBtn} onClick={() => tourGoTo(tourIndex + 1)} aria-label="Next stop" disabled={tourIndex === tourTexts.length - 1}>
+              <ChevronRight size={16} />
+            </button>
+            <div style={S.tourProgress}>{tourIndex + 1} / {tourTexts.length} — {tourTexts[tourIndex]?.title}</div>
+            <button style={S.iconBtn} onClick={exitTour} aria-label="Exit tour"><X size={16} /></button>
+          </div>
+        ) : (
+          <div style={S.transport}>
+            <button style={S.playBtn} onClick={togglePlay} aria-label={playing ? "Pause" : "Play"}>
+              {playing ? <Pause size={18} /> : <Play size={18} />}
+              <span>{playing ? "Pause" : year >= YEAR_MAX ? "Replay" : "Play"}</span>
+            </button>
+            <button style={S.tourBtn} onClick={startTour} aria-label="Start a guided tour">
+              <Film size={16} /> <span>Tour</span>
+            </button>
+            <button style={S.iconBtn} onClick={reset} aria-label="Reset to the beginning"><RotateCcw size={16} /></button>
+            <input type="range" min={YEAR_MIN} max={YEAR_MAX} step={1} value={Math.round(year)}
+              onChange={(e) => { setPlaying(false); setYear(Number(e.target.value)); }}
+              style={S.slider} aria-label="Scrub through time" />
+            <div style={S.yearReadout}>{fmtYear(year)}</div>
+          </div>
+        )}
       </section>
 
       <footer style={S.footer}>

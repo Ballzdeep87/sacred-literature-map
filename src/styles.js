@@ -103,6 +103,8 @@ export const S = {
   transport: { display: "flex", alignItems: "center", gap: "12px", marginTop: "12px", flexWrap: "wrap" },
   playBtn: { display: "inline-flex", alignItems: "center", gap: "8px", background: "#e6b84a", color: "#1a1509", border: "none", borderRadius: "8px", padding: "9px 16px", fontWeight: 700, fontSize: "14px", cursor: "pointer", fontFamily: sans },
   iconBtn: { display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#1f1a0e", color: "#c9a94a", border: "1px solid #3f3a28", borderRadius: "8px", padding: "9px", cursor: "pointer" },
+  tourBtn: { display: "inline-flex", alignItems: "center", gap: "7px", background: "#1f1a0e", color: "#e6b84a", border: "1px solid #3f3a28", borderRadius: "8px", padding: "9px 14px", fontWeight: 700, fontSize: "13px", cursor: "pointer", fontFamily: sans },
+  tourProgress: { flex: 1, minWidth: "160px", fontFamily: mono, fontSize: "12px", color: "#c9a94a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
   slider: { flex: 1, minWidth: "160px" },
   yearReadout: { fontFamily: mono, fontSize: "14px", color: "#e6b84a", minWidth: "84px", textAlign: "right" },
 
