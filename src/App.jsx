@@ -19,16 +19,33 @@ import SearchBox from "./components/SearchBox.jsx";
  * one info panel (src/components/InfoPanel.jsx).
  * ------------------------------------------------------------------ */
 
+// A permalink (?text=some_id) opens straight to that entry, timeline
+// scrubbed to its date so it reads as "lit," not greyed out.
+function initialSelection() {
+  const id = new URLSearchParams(window.location.search).get("text");
+  return id && TEXT_BY_ID[id] ? id : null;
+}
+
 export default function App() {
-  const [year, setYear] = useState(YEAR_MIN);
+  const initialSel = initialSelection();
+  const [year, setYear] = useState(initialSel ? TEXT_BY_ID[initialSel].start : YEAR_MIN);
   const [playing, setPlaying] = useState(false);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(initialSel);
   const [hover, setHover] = useState(null);
   const [view, setView] = useState("map"); // "map" | "web"
   const rafRef = useRef(null);
   const lastRef = useRef(null);
 
   const YEARS_PER_SEC = 260;
+
+  // Keep the URL in sync so any entry can be shared as a direct link —
+  // replaceState (not push) so clicking around the map doesn't spam browser history.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (selected) url.searchParams.set("text", selected);
+    else url.searchParams.delete("text");
+    window.history.replaceState(null, "", url);
+  }, [selected]);
 
   useEffect(() => {
     if (!playing) return;
@@ -122,7 +139,11 @@ export default function App() {
 
       {/* TIMELINE */}
       <section style={S.timelineWrap} aria-label="Timeline">
-        <svg viewBox={`0 0 ${TL_W} ${TL_H}`} style={{ width: "100%", display: "block" }}>
+        {/* Below ~900px this scrolls horizontally instead of shrinking —
+            with 23 culture bands and 47 markers packed into one SVG, text
+            goes illegible well before the layout itself breaks. */}
+        <div style={S.timelineScroll}>
+        <svg viewBox={`0 0 ${TL_W} ${TL_H}`} style={{ width: "100%", minWidth: "900px", display: "block" }}>
           {/* culture bands — same gentle fade as the map glows above */}
           {CULTURES.map((c, i) => {
             const x1 = tlX(Math.max(c.start, YEAR_MIN));
@@ -177,6 +198,7 @@ export default function App() {
           <line x1={tlX(year)} y1="8" x2={tlX(year)} y2={AXIS_Y + 8} stroke="#fff3d0" strokeWidth="2" opacity="0.85" />
           <circle cx={tlX(year)} cy="8" r="4" fill="#fff3d0" />
         </svg>
+        </div>
 
         {/* transport */}
         <div style={S.transport}>

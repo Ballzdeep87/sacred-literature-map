@@ -64,6 +64,23 @@ export default function GlobeMap({ year, selected }) {
 
   const selText = selected ? TEXT_BY_ID[selected] : null;
 
+  // If a newly selected text (e.g. from search, or a shared permalink) sits
+  // in the hemisphere we're not currently viewing, flip to the one that
+  // shows it — otherwise its marker just silently doesn't render.
+  useEffect(() => {
+    if (!selText) return;
+    const city = CITIES[selText.city];
+    if (!city || project([city.lon, city.lat])) return; // already visible
+    // Toggling blindly off the current focus breaks under StrictMode's
+    // double-invoke (two flips cancel out) — find the hemisphere that
+    // actually shows this city instead.
+    const shownIn = Object.keys(GLOBE_FOCI).find((key) => {
+      if (key === focus) return false;
+      return makeProjection(key).project([city.lon, city.lat]) !== null;
+    });
+    if (shownIn) setFocus(shownIn);
+  }, [selText, project, focus]);
+
   const regionGeom = useMemo(() => {
     return CULTURES.filter((c) => c.region?.length).map((c) => {
       const pts = c.region.map((id) => CITIES[id]).filter(Boolean);

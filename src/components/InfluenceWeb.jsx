@@ -85,7 +85,12 @@ export default function InfluenceWeb({ year, selected, onSelect, hover, onHover 
 
   return (
     <section style={S.mapWrap} aria-label="Influence web — every text and its influences, grouped by tradition">
-      <svg viewBox={`0 0 ${W} ${totalHeight}`} style={S.mapSvg} role="img">
+      {/* 15 lanes of labels + up to 47 node tooltips go illegible well
+          before the layout breaks — scroll horizontally below ~900px
+          instead of shrinking text past reading size (same fix as the
+          main timeline in App.jsx). */}
+      <div style={S.timelineScroll}>
+      <svg viewBox={`0 0 ${W} ${totalHeight}`} style={{ ...S.mapSvg, minWidth: "900px" }} role="img">
         <rect x="0" y="0" width={W} height={totalHeight} fill="#0f0d08" />
 
         {/* lane bands + labels */}
@@ -169,6 +174,7 @@ export default function InfluenceWeb({ year, selected, onSelect, hover, onHover 
         {/* playhead */}
         <line x1={tlX(year)} y1="4" x2={tlX(year)} y2={AXIS_Y} stroke="#fff3d0" strokeWidth="1.5" opacity="0.5" />
       </svg>
+      </div>
 
       <div style={S.mapNote}>
         Rows group texts by literary tradition, not geography — this is the same {TEXTS.length}{" "}
