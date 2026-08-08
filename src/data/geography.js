@@ -1,9 +1,9 @@
 /* ------------------------------------------------------------------ *
- * Geography (Phase 6) — real latitude/longitude, projected through
- * src/geo.js's orthographic projection. Positions are still meant for
- * orientation rather than survey accuracy: coastlines, rivers, and
- * mountains below are hand-simplified, not traced from real map data
- * (see PROJECT-BRIEF.md.pdf section 5 — no modern map library).
+ * Geography — real latitude/longitude, projected through src/geo.js's
+ * orthographic projection. Coastlines themselves come from real data
+ * (src/geo.js's WORLD_LAND, Phase 12) — what's hand-placed here are the
+ * schematic annotations layered on top: cities, rivers, and mountains.
+ * Positions are still meant for orientation rather than survey accuracy.
  *
  * Coordinates are [longitude, latitude], matching GeoJSON convention.
  * ------------------------------------------------------------------ */
@@ -70,98 +70,10 @@ export const CITIES = {
   ctesiphon: { lon: 44.58, lat: 33.09, label: "Ctesiphon" },
 };
 
-// Simplified coastlines, as [lon, lat] point lists — GeoJSON polygons
-// (closed shapes) for named seas, drawn over a full land-colored base.
-export const SEAS = {
-  mediterranean: [
-    [-9, 36], [-4, 37.5], [0, 38.5], [4, 39.5], [8, 40.5], [12, 40.2],
-    [16, 39.2], [20, 38.3], [24, 36.4], [27, 37], [30, 36.6], [33, 36.4],
-    [35, 36.2], [36, 35], [35.9, 33.5], [35, 31.6], [34, 31.3], [32, 31.4],
-    [30, 32], [27, 36.5], [23, 38], [19, 40], [15, 38], [12, 40], [9, 38],
-    [5, 38], [0, 37], [-5, 36], [-9, 36],
-  ],
-  redSea: [
-    [32.5, 29.9], [34, 28], [36, 24], [38, 19.5], [40, 15.8], [43, 12.8],
-    [43.5, 12.3], [41.8, 12.5], [39.5, 15.3], [37, 19], [34.8, 23],
-    [33.3, 27], [32.5, 29.9],
-  ],
-  persianGulf: [
-    [48.0, 30.0], [49.5, 30.0], [52.2, 29.6], [55.0, 28.2], [56.5, 27.1],
-    [56.3, 26.6], [53.5, 25.4], [52.3, 26.0], [51.2, 27.0], [50.2, 28.3],
-    [49.2, 29.4], [48.0, 30.0],
-  ],
-  // A broad, deliberately loose sketch of the Arabian Sea / western
-  // Indian Ocean — this is filler for the wider frame, not a claim
-  // about any coastline detail.
-  arabianSea: [
-    [43, 12.5], [48, 10], [55, 12], [60, 15], [63, 20], [66, 23],
-    [69, 22], [71, 18], [73, 12], [72, 6], [66, 3], [58, 5], [50, 8],
-    [45, 10], [43, 12.5],
-  ],
-  bayOfBengal: [
-    [80, 8], [83, 10], [86, 14], [89, 18], [92, 20], [93, 15], [90, 10],
-    [85, 6], [80, 8],
-  ],
-  // South China Sea + a gesture toward the Yellow Sea — simplified, to
-  // carve East Asia's coast out of the land backdrop.
-  chinaSea: [
-    [107, 10], [105, 14], [108, 18], [112, 24], [116, 30], [118, 34],
-    [120, 37], [123, 38], [124, 36], [122, 33], [121, 30], [122, 27],
-    [122, 22], [120, 18], [118, 14], [115, 10], [110, 8], [107, 10],
-  ],
-
-  // Americas focus (Phase 7c, redrawn Phase 11) — Pacific and Gulf/
-  // Caribbean coasts, traced from real coastline shape (Mexico's Pacific
-  // coast, Isthmus of Tehuantepec, Yucatán, Central America down to
-  // Panama) rather than a rough guess, so Tenochtitlan and Q'umarkaj —
-  // both genuinely inland highland cities — read as inland, not coastal.
-  // The Yucatán peninsula emerges as the land left between the two
-  // eastern seas, the same way Ugarit/Levant do between the
-  // Mediterranean and inland Mesopotamia above.
-  pacificAmericas: [
-    [-106.4, 23.2], [-105.3, 20.6], [-101.7, 17.9], [-99.9, 16.8],
-    [-97.1, 15.9], [-94.7, 16.2], [-92.2, 14.9], [-91.5, 14.0],
-    [-89.2, 13.2], [-87.0, 11.8], [-85.5, 10.0], [-84.0, 9.0],
-    [-82.9, 8.2], [-79.5, 8.9], [-77.3, 7.7],
-    [-82, 3], [-95, -2], [-110, 10], [-115, 20], [-112, 25],
-    [-106.4, 23.2],
-  ],
-  gulfOfMexico: [
-    [-97.4, 26.0], [-95.3, 28.9], [-91.9, 29.3], [-87.0, 28.0],
-    [-85.5, 24.0], [-86.3, 21.6], [-90.3, 19.3], [-94.0, 18.6],
-    [-95.9, 19.0], [-97.4, 22.2], [-97.4, 26.0],
-  ],
-  caribbeanSea: [
-    [-86.8, 21.3], [-84.5, 21.5], [-82.0, 19.5], [-78.0, 17.0],
-    [-75.0, 12.0], [-77.3, 8.5], [-79.9, 9.4], [-81.8, 9.5],
-    [-82.6, 12.5], [-83.7, 14.9], [-87.9, 15.9], [-87.4, 19.0],
-    [-86.8, 21.3],
-  ],
-  // A generous box of open North Atlantic — Iceland (LANDMASSES.iceland
-  // below) is drawn back on top of it, island-in-the-sea style.
-  northAtlantic: [
-    [-10, 62], [-27, 62], [-27, 68], [-10, 68], [-10, 62],
-  ],
-};
-
-// Small islands, drawn in land color ON TOP of a sea (see SEAS above) —
-// the simplest way to show something as surrounded by water without
-// needing donut/hole polygons.
-export const LANDMASSES = {
-  iceland: [
-    [-22, 66.5], [-18, 66.4], [-14, 65.5], [-13.5, 64.3], [-15, 63.4],
-    [-19, 63.4], [-22, 63.9], [-24, 64.9], [-23, 65.8], [-22, 66.5],
-  ],
-  // Baja California — no city sits here, but its absence was a big part
-  // of why the Americas coastline read as an unrecognizable blob rather
-  // than "Mexico." Traced up one side and down the other, same technique
-  // as Iceland above.
-  bajaCalifornia: [
-    [-117.1, 32.5], [-114.8, 31.8], [-114.2, 29.5], [-112.5, 27.0],
-    [-110.8, 24.3], [-109.9, 23.0], [-111.5, 24.5], [-113.5, 26.5],
-    [-115.5, 29.5], [-117.1, 32.5],
-  ],
-};
+// Coastlines are real now (src/geo.js's WORLD_LAND, Phase 12) — SEAS and
+// LANDMASSES, the hand-guessed polygons that used to carve water out of
+// a land-colored base, are gone. Sea/river name labels below are just
+// text placed at a chosen [lon, lat], independent of any polygon.
 
 export const RIVERS = {
   euphrates: [

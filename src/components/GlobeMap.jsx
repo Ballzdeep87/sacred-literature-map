@@ -1,12 +1,12 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
 import { zoom as d3zoom, zoomIdentity } from "d3-zoom";
 import { select } from "d3-selection";
-import { CITIES, SEAS, RIVERS, MOUNTAINS, LANDMASSES } from "../data/geography.js";
+import { CITIES, RIVERS, MOUNTAINS } from "../data/geography.js";
 import { CULTURES } from "../data/cultures.js";
 import { TEXTS, TEXT_BY_ID, CONFIDENCE_COLOR, LINK_TIER } from "../data/texts.js";
 import { fadeWeight } from "../utils.js";
 import { S } from "../styles.js";
-import { GLOBE_SIZE, GLOBE_FOCI, makeProjection, lineString, polygon, GRATICULE } from "../geo.js";
+import { GLOBE_SIZE, GLOBE_FOCI, WORLD_LAND, makeProjection, lineString, GRATICULE } from "../geo.js";
 
 /* ------------------------------------------------------------------ *
  * Phase 6 — the map, real geography (src/geo.js), rendered as an
@@ -156,9 +156,14 @@ export default function GlobeMap({ year, selected }) {
         </defs>
 
         <g transform={`translate(${transform.x},${transform.y}) scale(${transform.k})`}>
-          {/* the globe itself */}
-          <path d={pathGen(outline)} fill="url(#land)" stroke="#4b4230" strokeWidth="1.5" />
-          <path d={pathGen(GRATICULE)} fill="none" stroke="#4b4230" strokeWidth="0.5" opacity="0.35" />
+          {/* the globe itself — ocean is the default fill (there's more sea
+              than land on Earth), with real coastlines (src/geo.js's
+              WORLD_LAND, from world-atlas/Natural Earth) drawn on top in
+              land color. No country borders, no satellite imagery — just
+              accurate coastline shape rendered in our own ink/sepia style. */}
+          <path d={pathGen(outline)} fill="url(#water)" stroke="#4b4230" strokeWidth="1.5" />
+          <path d={pathGen(WORLD_LAND)} fill="url(#land)" stroke="#4b4230" strokeWidth="1" />
+          <path d={pathGen(GRATICULE)} fill="none" stroke="#4b4230" strokeWidth="0.5" opacity="0.2" />
 
           {/* Zagros / Himalaya mountains, schematic */}
           {MOUNTAINS.map((pt, i) => {
@@ -171,10 +176,6 @@ export default function GlobeMap({ year, selected }) {
             );
           })}
 
-          {/* seas */}
-          {Object.entries(SEAS).map(([id, coords]) => (
-            <path key={id} d={pathGen(polygon(coords))} fill="url(#water)" />
-          ))}
           {medLabel && (
             <g transform={`translate(${medLabel[0]},${medLabel[1]}) scale(${markerScale})`}>
               <text style={S.seaLabel}>Mediterranean</text>
@@ -185,11 +186,6 @@ export default function GlobeMap({ year, selected }) {
               <text style={S.seaLabel}>Persian Gulf</text>
             </g>
           )}
-
-          {/* small islands, drawn back on top of a sea (see LANDMASSES) */}
-          {Object.entries(LANDMASSES).map(([id, coords]) => (
-            <path key={id} d={pathGen(polygon(coords))} fill="url(#land)" stroke="#4b4230" strokeWidth="1" />
-          ))}
 
           {/* rivers */}
           {Object.entries(RIVERS).map(([id, coords]) => (
@@ -270,11 +266,11 @@ export default function GlobeMap({ year, selected }) {
       </svg>
 
       <div style={S.mapNote}>
-        Real latitude/longitude, projected as a globe — not a modern political map: no modern
-        borders, no satellite imagery, just hand-simplified coasts, rivers, and mountains. Scroll
-        or pinch to zoom in on a crowded cluster, drag to pan, and use the {GLOBE_FOCI.oldWorld.label}/
-        {GLOBE_FOCI.americas.label} switch above to see the other hemisphere. Positions stay
-        approximate, for orientation rather than survey accuracy.
+        Real coastlines, projected as a globe — not a modern political map: no modern borders,
+        no satellite imagery, just accurate coasts under hand-placed rivers, mountains, and cities.
+        Scroll or pinch to zoom in on a crowded cluster, drag to pan, and use the {GLOBE_FOCI.oldWorld.label}/
+        {GLOBE_FOCI.americas.label} switch above to see the other hemisphere. City and river positions
+        stay approximate, for orientation rather than survey accuracy.
       </div>
 
       <div style={S.legend}>
