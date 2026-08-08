@@ -103,10 +103,41 @@ export const RIVERS = {
   ],
 };
 
-// Mountain ranges, schematic — Zagros (northeast of Mesopotamia) and
-// the Himalayan front (north of the Ganges plain).
-export const MOUNTAINS = [
-  [45.5, 37.2], [46.3, 36.0], [47.0, 34.8], [47.8, 33.6],
-  [48.4, 32.4], [49.0, 31.2], [49.6, 30.0],
-  [75, 32], [78, 30], [81, 29], [84, 28], [87, 27], [90, 27],
-];
+// Mountain ranges, schematic — each a chain of points tracing the real
+// range's path, one small triangle glyph per point (see GlobeMap.jsx).
+// Keyed the same way RIVERS is, mainly so it's obvious at a glance which
+// range a given point belongs to when this list grows.
+export const MOUNTAINS = {
+  // Northeast of Mesopotamia.
+  zagros: [
+    [45.5, 37.2], [46.3, 36.0], [47.0, 34.8], [47.8, 33.6],
+    [48.4, 32.4], [49.0, 31.2], [49.6, 30.0],
+  ],
+  // North of the Ganges plain.
+  himalaya: [
+    [75, 32], [78, 30], [81, 29], [84, 28], [87, 27], [90, 27],
+  ],
+  // Western South America, Venezuela down to Patagonia — the Americas
+  // focus had zero topography before this; the Old World's mountains
+  // were making it look more "finished" than the Americas by contrast.
+  andes: [
+    [-72, 8], [-78, -1], [-76, -10], [-72, -14],
+    [-68, -18], [-70, -24], [-70, -33], [-71, -40],
+  ],
+  // Western North America, New Mexico up into Canada.
+  rockies: [
+    [-106, 36], [-110, 43], [-113, 47], [-116, 52], [-120, 56],
+  ],
+  // France/Switzerland/Austria/Slovenia arc.
+  alps: [
+    [6.5, 45.8], [8.2, 46.5], [11.5, 47.2], [13.8, 46.4],
+  ],
+  // Morocco through Algeria/Tunisia.
+  atlas: [
+    [-7, 31.5], [-5, 32.5], [2, 34.5], [5, 35.5],
+  ],
+  // Between the Black and Caspian seas.
+  caucasus: [
+    [40, 43], [43, 42.5], [46, 42], [48.5, 41.5],
+  ],
+};

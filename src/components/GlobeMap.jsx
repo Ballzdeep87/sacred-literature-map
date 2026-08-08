@@ -165,16 +165,19 @@ export default function GlobeMap({ year, selected }) {
           <path d={pathGen(WORLD_LAND)} fill="url(#land)" stroke="#4b4230" strokeWidth="1" />
           <path d={pathGen(GRATICULE)} fill="none" stroke="#4b4230" strokeWidth="0.5" opacity="0.2" />
 
-          {/* Zagros / Himalaya mountains, schematic */}
-          {MOUNTAINS.map((pt, i) => {
-            const p = project(pt);
-            if (!p) return null;
-            return (
-              <g key={i} transform={`translate(${p[0]},${p[1]}) scale(${markerScale})`}>
-                <path d="M0 0 l11 -15 l11 15 z" fill="#3a3324" stroke="#4b4230" strokeWidth="1.2" />
-              </g>
-            );
-          })}
+          {/* mountain ranges, schematic — one small triangle glyph per
+              traced point (src/data/geography.js's MOUNTAINS) */}
+          {Object.entries(MOUNTAINS).flatMap(([rangeId, pts]) =>
+            pts.map((pt, i) => {
+              const p = project(pt);
+              if (!p) return null;
+              return (
+                <g key={`${rangeId}-${i}`} transform={`translate(${p[0]},${p[1]}) scale(${markerScale})`}>
+                  <path d="M0 0 l11 -15 l11 15 z" fill="#3a3324" stroke="#4b4230" strokeWidth="1.2" />
+                </g>
+              );
+            })
+          )}
 
           {medLabel && (
             <g transform={`translate(${medLabel[0]},${medLabel[1]}) scale(${markerScale})`}>
