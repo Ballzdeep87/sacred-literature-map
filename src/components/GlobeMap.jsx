@@ -110,6 +110,15 @@ export default function GlobeMap({ year, selected }) {
   const tigrisLabel = project([44.6, 34.2]);
   const zoomedIn = transform.k > 1.05;
 
+  // Geography (coastlines, rivers, region glows) should scale up on zoom —
+  // that's the whole point of "zoom in for a ~500 mile view." But point
+  // markers and their text labels are UI, not geography: at k=6+ a city
+  // dot was rendering 6x its size and 11px labels became inches-tall
+  // overlapping type, unreadable and unclickable. Counter-scaling each
+  // marker's own group by 1/k keeps it a constant screen size while its
+  // position still tracks the zoomed/panned map underneath it.
+  const markerScale = 1 / transform.k;
+
   return (
     <section style={S.mapWrap} aria-label="World map, real geography, ancient schematic style">
       <div style={S.mapControls}>
@@ -155,15 +164,27 @@ export default function GlobeMap({ year, selected }) {
           {MOUNTAINS.map((pt, i) => {
             const p = project(pt);
             if (!p) return null;
-            return <path key={i} d={`M${p[0]} ${p[1]} l11 -15 l11 15 z`} fill="#3a3324" stroke="#4b4230" strokeWidth="1.2" />;
+            return (
+              <g key={i} transform={`translate(${p[0]},${p[1]}) scale(${markerScale})`}>
+                <path d="M0 0 l11 -15 l11 15 z" fill="#3a3324" stroke="#4b4230" strokeWidth="1.2" />
+              </g>
+            );
           })}
 
           {/* seas */}
           {Object.entries(SEAS).map(([id, coords]) => (
             <path key={id} d={pathGen(polygon(coords))} fill="url(#water)" />
           ))}
-          {medLabel && <text x={medLabel[0]} y={medLabel[1]} style={S.seaLabel}>Mediterranean</text>}
-          {gulfLabel && <text x={gulfLabel[0]} y={gulfLabel[1]} style={S.seaLabel}>Persian Gulf</text>}
+          {medLabel && (
+            <g transform={`translate(${medLabel[0]},${medLabel[1]}) scale(${markerScale})`}>
+              <text style={S.seaLabel}>Mediterranean</text>
+            </g>
+          )}
+          {gulfLabel && (
+            <g transform={`translate(${gulfLabel[0]},${gulfLabel[1]}) scale(${markerScale})`}>
+              <text style={S.seaLabel}>Persian Gulf</text>
+            </g>
+          )}
 
           {/* small islands, drawn back on top of a sea (see LANDMASSES) */}
           {Object.entries(LANDMASSES).map(([id, coords]) => (
@@ -174,8 +195,16 @@ export default function GlobeMap({ year, selected }) {
           {Object.entries(RIVERS).map(([id, coords]) => (
             <path key={id} d={pathGen(lineString(coords))} fill="none" stroke="#3f7fb0" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
           ))}
-          {euphratesLabel && <text x={euphratesLabel[0]} y={euphratesLabel[1]} style={S.riverLabel}>Euphrates</text>}
-          {tigrisLabel && <text x={tigrisLabel[0]} y={tigrisLabel[1]} style={S.riverLabel}>Tigris</text>}
+          {euphratesLabel && (
+            <g transform={`translate(${euphratesLabel[0]},${euphratesLabel[1]}) scale(${markerScale})`}>
+              <text style={S.riverLabel}>Euphrates</text>
+            </g>
+          )}
+          {tigrisLabel && (
+            <g transform={`translate(${tigrisLabel[0]},${tigrisLabel[1]}) scale(${markerScale})`}>
+              <text style={S.riverLabel}>Tigris</text>
+            </g>
+          )}
 
           {/* peoples/empires — soft blurred glows, not political borders */}
           {regionGeom.map((c) => {
@@ -210,7 +239,9 @@ export default function GlobeMap({ year, selected }) {
               );
             })}
 
-          {/* cities */}
+          {/* cities — counter-scaled (see markerScale above) so dots and
+              labels stay a constant, clickable, readable screen size no
+              matter how far zoomed in; only their position tracks the map. */}
           {Object.entries(CITIES).map(([id, c]) => {
             const p = project([c.lon, c.lat]);
             if (!p) return null;
@@ -219,12 +250,12 @@ export default function GlobeMap({ year, selected }) {
             const lit = w > 0.5;
             const isSel = selText && (selText.city === id || selText.influences.some((f) => TEXT_BY_ID[f.from]?.city === id));
             return (
-              <g key={id} opacity={0.32 + w * 0.68}>
-                <circle cx={p[0]} cy={p[1]} r={isSel ? 7 : 4.5}
+              <g key={id} opacity={0.32 + w * 0.68} transform={`translate(${p[0]},${p[1]}) scale(${markerScale})`}>
+                <circle cx={0} cy={0} r={isSel ? 7 : 4.5}
                   fill={lit ? "#e6b84a" : "#6b6350"}
                   stroke={isSel ? "#fff3d0" : "none"} strokeWidth="2"
                   className={isSel ? "pulse" : ""} />
-                <text x={p[0] + 9} y={p[1] + 4} style={{ ...S.cityLabel, fill: lit ? "#e9e0c8" : "#7c745f" }}>
+                <text x={9} y={4} style={{ ...S.cityLabel, fill: lit ? "#e9e0c8" : "#7c745f" }}>
                   {c.label}
                 </text>
               </g>

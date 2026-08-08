@@ -53,8 +53,12 @@ export const S = {
   clockLabel: { fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase", color: "#8a815f" },
   clockValue: { fontSize: "26px", color: "#e6b84a", fontWeight: 600 },
 
-  stage: { display: "flex", gap: "16px", alignItems: "stretch", flexWrap: "wrap" },
-  mapWrap: { flex: "1 1 560px", background: "#0f0d08", border: "1px solid #2b2718", borderRadius: "12px", padding: "10px", minWidth: "300px" },
+  stage: { display: "flex", gap: "16px", alignItems: "stretch", justifyContent: "center", flexWrap: "wrap" },
+  // The globe's viewBox is square, so unbounded width = unbounded height —
+  // on a wide desktop window it was rendering 860px+ tall, taller than the
+  // viewport itself, pushing the timeline off-screen. Capped so the map
+  // stays a reasonable size no matter how wide the window gets.
+  mapWrap: { flex: "1 1 560px", maxWidth: "600px", background: "#0f0d08", border: "1px solid #2b2718", borderRadius: "12px", padding: "10px", minWidth: "300px" },
   mapSvg: { width: "100%", display: "block", borderRadius: "8px" },
   mapNote: { fontSize: "11px", color: "#7c745f", fontStyle: "italic", marginTop: "6px", paddingLeft: "4px" },
   seaLabel: { fontFamily: serif, fontSize: "13px", fill: "#5f7d97", letterSpacing: "0.1em" },
