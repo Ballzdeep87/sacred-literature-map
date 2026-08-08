@@ -10,6 +10,7 @@ import { S, CSS } from "./styles.js";
 import InfoPanel from "./components/InfoPanel.jsx";
 import InfluenceWeb from "./components/InfluenceWeb.jsx";
 import GlobeMap from "./components/GlobeMap.jsx";
+import SearchBox from "./components/SearchBox.jsx";
 
 /* ------------------------------------------------------------------ *
  * A Living Map of Sacred Literature
@@ -95,15 +96,18 @@ export default function App() {
         </div>
       </header>
 
-      <div style={S.viewToggle} role="tablist" aria-label="Choose a view">
-        <button style={{ ...S.viewToggleBtn, ...(view === "map" ? S.viewToggleBtnActive : {}) }}
-          role="tab" aria-selected={view === "map"} onClick={() => setView("map")}>
-          <MapIcon size={14} /> Map
-        </button>
-        <button style={{ ...S.viewToggleBtn, ...(view === "web" ? S.viewToggleBtnActive : {}) }}
-          role="tab" aria-selected={view === "web"} onClick={() => setView("web")}>
-          <Share2 size={14} /> Influence web
-        </button>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap", marginBottom: "16px" }}>
+        <div style={S.viewToggle} role="tablist" aria-label="Choose a view">
+          <button style={{ ...S.viewToggleBtn, ...(view === "map" ? S.viewToggleBtnActive : {}) }}
+            role="tab" aria-selected={view === "map"} onClick={() => setView("map")}>
+            <MapIcon size={14} /> Map
+          </button>
+          <button style={{ ...S.viewToggleBtn, ...(view === "web" ? S.viewToggleBtnActive : {}) }}
+            role="tab" aria-selected={view === "web"} onClick={() => setView("web")}>
+            <Share2 size={14} /> Influence web
+          </button>
+        </div>
+        <SearchBox onSelect={setSelected} />
       </div>
 
       <div style={S.stage}>

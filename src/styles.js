@@ -31,9 +31,19 @@ export const S = {
   sub: { margin: 0, maxWidth: "620px", fontSize: "14px", lineHeight: 1.5, color: "#b6ab8e" },
   clock: { textAlign: "right", fontFamily: mono, minWidth: "120px" },
 
-  viewToggle: { display: "inline-flex", gap: "6px", background: "#171308", border: "1px solid #2b2718", borderRadius: "9px", padding: "4px", marginBottom: "16px" },
+  viewToggle: { display: "inline-flex", gap: "6px", background: "#171308", border: "1px solid #2b2718", borderRadius: "9px", padding: "4px" },
   viewToggleBtn: { display: "inline-flex", alignItems: "center", gap: "6px", background: "transparent", border: "none", borderRadius: "6px", padding: "7px 14px", fontSize: "12.5px", fontFamily: sans, color: "#a89d7d", cursor: "pointer", fontWeight: 600 },
   viewToggleBtnActive: { background: "#e6b84a", color: "#1a1509" },
+
+  searchWrap: { position: "relative", display: "inline-flex", alignItems: "center", minWidth: "220px" },
+  searchIcon: { position: "absolute", left: "10px", color: "#7c745f", pointerEvents: "none" },
+  searchInput: { width: "100%", background: "#0f0d08", border: "1px solid #2b2718", borderRadius: "8px", padding: "8px 30px 8px 30px", fontSize: "12.5px", fontFamily: sans, color: "#e9e0c8", outline: "none", boxSizing: "border-box" },
+  searchClear: { position: "absolute", right: "8px", background: "transparent", border: "none", color: "#8a815f", cursor: "pointer", display: "inline-flex", padding: "2px" },
+  searchDropdown: { position: "absolute", top: "calc(100% + 6px)", left: 0, right: 0, zIndex: 20, listStyle: "none", margin: 0, padding: "5px", background: "#171308", border: "1px solid #2b2718", borderRadius: "9px", boxShadow: "0 12px 28px rgba(0,0,0,0.45)", maxHeight: "320px", overflowY: "auto" },
+  searchResult: { display: "flex", flexDirection: "column", gap: "1px", width: "100%", textAlign: "left", background: "transparent", border: "none", color: "#ded2b0", cursor: "pointer", padding: "7px 9px", borderRadius: "6px", fontFamily: sans },
+  searchResultActive: { background: "#2b2718" },
+  searchResultTitle: { fontSize: "12.5px", color: "#f4ecd6", fontWeight: 600 },
+  searchResultMeta: { fontSize: "10.5px", color: "#8a815f", fontFamily: mono },
 
   mapControls: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", marginBottom: "8px" },
   globeFocusToggle: { display: "inline-flex", gap: "4px", background: "#0f0d08", border: "1px solid #2b2718", borderRadius: "7px", padding: "3px" },
